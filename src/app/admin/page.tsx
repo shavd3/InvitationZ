@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Copy, Check, LogOut, RefreshCw } from 'lucide-react';
+import { Copy, Check, LogOut, RefreshCw, RotateCcw } from 'lucide-react';
 import type { GuestAdmin } from '@/lib/guest';
 
 type AdminGuest = GuestAdmin & { inviteUrl: string };
@@ -13,6 +13,7 @@ export default function AdminPage() {
   const [guests, setGuests] = useState<AdminGuest[]>([]);
   const [loading, setLoading] = useState(false);
   const [copiedSlug, setCopiedSlug] = useState('');
+  const [resettingId, setResettingId] = useState('');
   const [filter, setFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'confirmed' | 'declined'>('all');
 
@@ -64,6 +65,26 @@ export default function AdminPage() {
     await navigator.clipboard.writeText(url);
     setCopiedSlug(slug);
     setTimeout(() => setCopiedSlug(''), 2000);
+  }
+
+  async function resetRsvp(guest: AdminGuest) {
+    if (guest.rsvpStatus === 'pending') return;
+    if (!confirm(`Reset RSVP for ${guest.displayName}? They will need to respond again.`)) return;
+
+    setResettingId(guest.id);
+    try {
+      const res = await fetch(`/api/admin/guests/${guest.id}/reset-rsvp`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || 'Unable to reset RSVP.');
+        return;
+      }
+      setGuests((prev) => prev.map((g) => (g.id === guest.id ? data.guest : g)));
+    } catch {
+      alert('Unable to reset RSVP. Please try again.');
+    } finally {
+      setResettingId('');
+    }
   }
 
   const filtered = guests.filter((g) => {
@@ -170,7 +191,7 @@ export default function AdminPage() {
                 <th className="text-center p-3 font-semibold text-warm-gray">Invited</th>
                 <th className="text-center p-3 font-semibold text-warm-gray">RSVP</th>
                 <th className="text-center p-3 font-semibold text-warm-gray hidden md:table-cell">Attending</th>
-                <th className="text-right p-3 font-semibold text-warm-gray">Link</th>
+                <th className="text-right p-3 font-semibold text-warm-gray">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -191,21 +212,34 @@ export default function AdminPage() {
                     {g.rsvpStatus === 'confirmed' ? (g.confirmedCount ?? g.invitedCount) : '—'}
                   </td>
                   <td className="p-3 text-right">
-                    <button
-                      type="button"
-                      onClick={() => copyLink(g.slug, g.inviteUrl)}
-                      className="btn-secondary inline-flex items-center gap-1.5 text-xs py-1.5 px-3"
-                    >
-                      {copiedSlug === g.slug ? (
-                        <>
-                          <Check size={14} /> Copied
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={14} /> Copy link
-                        </>
+                    <div className="flex flex-col sm:flex-row items-end sm:justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => copyLink(g.slug, g.inviteUrl)}
+                        className="btn-secondary inline-flex items-center gap-1.5 text-xs py-1.5 px-3"
+                      >
+                        {copiedSlug === g.slug ? (
+                          <>
+                            <Check size={14} /> Copied
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} /> Copy link
+                          </>
+                        )}
+                      </button>
+                      {g.rsvpStatus !== 'pending' && (
+                        <button
+                          type="button"
+                          onClick={() => resetRsvp(g)}
+                          disabled={resettingId === g.id}
+                          className="btn-secondary inline-flex items-center gap-1.5 text-xs py-1.5 px-3 text-red-700 border-red-200 hover:border-red-400 hover:text-red-800"
+                        >
+                          <RotateCcw size={14} />
+                          {resettingId === g.id ? 'Resetting...' : 'Reset RSVP'}
+                        </button>
                       )}
-                    </button>
+                    </div>
                   </td>
                 </tr>
               ))}

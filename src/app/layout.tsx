@@ -16,15 +16,12 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Great+Vibes&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="min-h-full antialiased">
         {children}
-        <footer className="text-center py-8 text-warm-gray-light text-sm border-t border-ivory-dark mt-8">
-          <p>Amaya & Shavin — Forever & Always</p>
-        </footer>
       </body>
     </html>
   );
