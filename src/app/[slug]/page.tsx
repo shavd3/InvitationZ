@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Link from 'next/link';
-import { Minus, Plus, CalendarPlus, CheckCircle, XCircle, Pencil } from 'lucide-react';
-import { InvitationFrame, HeartDivider } from '@/components/Floral';
+import { Minus, Plus, CalendarPlus, Pencil } from 'lucide-react';
+import { InvitationFrame, OrnamentalDivider } from '@/components/Floral';
+import { InviteExperience } from '@/components/InviteExperience';
 import {
   CoupleNames,
   ParentsBlessing,
   EventDetails,
   ContactDetails,
-  FindInviteLink,
 } from '@/components/InviteLayout';
 import { WEDDING, googleCalendarUrl } from '@/lib/constants';
 import type { GuestPublic } from '@/lib/guest';
@@ -87,22 +86,28 @@ export default function RsvpPage() {
 
   if (loading) {
     return (
-      <InvitationFrame>
-        <p className="text-center text-warm-gray-light text-lg">Loading your invitation...</p>
-      </InvitationFrame>
+      <InviteExperience>
+        <InvitationFrame>
+          <p className="text-center text-warm-gray-light text-sm tracking-widest uppercase">
+            Loading your invitation...
+          </p>
+        </InvitationFrame>
+      </InviteExperience>
     );
   }
 
   if (error && !guest) {
     return (
-      <InvitationFrame>
-        <div className="text-center">
-          <p className="text-lg text-warm-gray mb-6">{error}</p>
-          <Link href="/find" className="btn-gold">
-            Find your invitation
-          </Link>
-        </div>
-      </InvitationFrame>
+      <InviteExperience>
+        <InvitationFrame>
+          <div className="text-center">
+            <p className="text-base text-warm-gray mb-4">{error}</p>
+            <p className="text-[0.65rem] text-warm-gray-light tracking-wide leading-relaxed">
+              Please open the personal invitation link sent to you.
+            </p>
+          </div>
+        </InvitationFrame>
+      </InviteExperience>
     );
   }
 
@@ -112,200 +117,199 @@ export default function RsvpPage() {
   const showSummary = hasResponded && !editing && step !== 'accept-count';
 
   return (
-    <InvitationFrame>
-      <p className="text-center uppercase tracking-[0.2em] text-[0.65rem] sm:text-xs text-warm-gray-light mb-2">
-        You Are Cordially Invited
-      </p>
+    <InviteExperience>
+      <InvitationFrame>
+        <ParentsBlessing inviteeName={guest.displayName} />
 
-      <p className="text-center text-base sm:text-lg text-warm-gray italic mb-1">
-        Dear {guest.displayName},
-      </p>
-      {guest.invitedCount > 1 && (
-        <p className="text-center text-xs text-warm-gray-light mb-3">
-          This invitation is for {guest.invitedCount} guests.
-        </p>
-      )}
-      {guest.invitedCount <= 1 && <div className="mb-4" />}
-
-      <ParentsBlessing />
-
-      <div className="my-3">
         <CoupleNames />
-      </div>
 
-      <HeartDivider compact />
+        <OrnamentalDivider />
 
-      <EventDetails compact />
+        <EventDetails showDirections={guest.rsvpStatus === 'confirmed'} />
 
-      <p className="text-center uppercase tracking-widest text-[0.65rem] sm:text-xs text-warm-gray-light mt-4 mb-2 leading-snug">
-        {WEDDING.refreshmentsNote}
-      </p>
-
-      {!hasResponded && (
-        <p className="text-center text-xs sm:text-sm text-warm-gray-light mb-4">
-          Please respond by{' '}
-          <span className="font-semibold text-[color:var(--color-gold-dark)]">
-            {WEDDING.rsvpDeadline}
-          </span>
+        <p className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal leading-relaxed">
+          {WEDDING.refreshmentsNote}
         </p>
-      )}
 
-      {error && (
-        <div className="mb-3 p-3 rounded-2xl bg-red-50 text-red-800 text-center text-sm">{error}</div>
-      )}
-
-      {/* Already responded — summary view */}
-      {showSummary && (
-        <div className="panel text-center mb-2">
-          {guest.rsvpStatus === 'confirmed' ? (
-            <>
-              <CheckCircle className="mx-auto text-green-600 mb-3" size={44} />
-              <h2 className="text-2xl font-semibold text-[color:var(--color-gold-dark)] mb-2">
-                Thank you!
-              </h2>
-              <p className="text-base text-warm-gray mb-1">
-                We&apos;re delighted you&apos;ll be joining us
-                {guest.confirmedCount && guest.confirmedCount > 1
-                  ? ` with ${guest.confirmedCount} guests`
-                  : ''}
-                .
-              </p>
-            </>
-          ) : (
-            <>
-              <XCircle className="mx-auto text-warm-gray-light mb-3" size={44} />
-              <h2 className="text-2xl font-semibold text-[color:var(--color-gold-dark)] mb-2">
-                Thank you for letting us know
-              </h2>
-              <p className="text-base text-warm-gray">We&apos;ll miss you on our special day.</p>
-            </>
-          )}
-          <p className="text-xs text-warm-gray-light mt-4">
-            You can reopen this link anytime to change your response.
+        {!hasResponded && (
+          <p className="text-center text-[0.65rem] sm:text-xs text-warm-gray-light tracking-wide">
+            Kindly respond by{' '}
+            <span className="text-[color:var(--color-gold-dark)] font-medium">
+              {WEDDING.rsvpDeadline}
+            </span>
           </p>
-          <div className="flex flex-col gap-3 mt-6">
-            <a
-              href={googleCalendarUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-outline flex items-center justify-center gap-2"
-            >
-              <CalendarPlus size={20} />
-              Add to Google Calendar
-            </a>
-            <button
-              type="button"
-              onClick={startEdit}
-              className="btn-secondary flex items-center justify-center gap-2"
-            >
-              <Pencil size={18} />
-              Edit my RSVP
-            </button>
+        )}
+
+        {error && (
+          <div className="mb-4 p-3 border border-red-200 bg-red-50/80 text-red-800 text-center text-sm">
+            {error}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Fresh visit or editing */}
-      {!showSummary && (
-        <div className="panel mb-2 py-3.5">
-          {hasResponded && step === 'view' && (
-            <div className="text-center mb-4">
-              <p className="text-warm-gray text-sm mb-2">Your current response:</p>
-              <span className={`status-badge status-${guest.rsvpStatus}`}>
-                {guest.rsvpStatus === 'confirmed'
-                  ? `Attending${guest.confirmedCount ? ` (${guest.confirmedCount})` : ''}`
-                  : 'Not attending'}
-              </span>
-            </div>
-          )}
-
-          {step === 'view' && (
-            <div className="space-y-3">
-              <button
-                type="button"
-                className="btn-gold"
-                disabled={submitting}
-                onClick={() => {
-                  if (guest.invitedCount > 1) {
-                    setAttendingCount(guest.confirmedCount ?? guest.invitedCount);
-                    setStep('accept-count');
-                  } else {
-                    submitRsvp('confirmed', 1);
-                  }
-                }}
-              >
-                Yes, we&apos;re coming!
-              </button>
-              <button
-                type="button"
-                className="btn-outline"
-                disabled={submitting}
-                onClick={() => submitRsvp('declined')}
-              >
-                Sorry, we can&apos;t make it
-              </button>
-            </div>
-          )}
-
-          {step === 'accept-count' && (
-            <div>
-              <h2 className="text-xl font-semibold text-[color:var(--color-gold-dark)] text-center mb-4">
-                How many of you are coming?
-              </h2>
-              <p className="text-center text-warm-gray-light text-sm mb-6">
-                Up to {guest.invitedCount} guest{guest.invitedCount > 1 ? 's' : ''}
-              </p>
-              <div className="flex items-center justify-center gap-6 mb-8">
-                <button
-                  type="button"
-                  aria-label="Decrease count"
-                  className="w-14 h-14 rounded-full border-2 border-[color:var(--color-gold)] text-[color:var(--color-gold-dark)] flex items-center justify-center hover:bg-[color:var(--color-gold)] hover:text-white transition-colors disabled:opacity-40"
-                  disabled={attendingCount <= 1}
-                  onClick={() => setAttendingCount((c) => Math.max(1, c - 1))}
+        {showSummary && (
+          <div className="panel text-center">
+            {guest.rsvpStatus === 'confirmed' ? (
+              <>
+                <p className="font-display text-2xl text-foil mb-3">
+                  With gratitude
+                </p>
+                <p className="text-sm text-warm-gray font-light leading-relaxed mb-1">
+                  We are honoured you will join us
+                  {guest.confirmedCount && guest.confirmedCount > 1
+                    ? ` with ${guest.confirmedCount} guests`
+                    : ''}
+                  .
+                </p>
+              </>
+            ) : (
+              <>
+                <p
+                  className="text-2xl text-[color:var(--color-gold-dark)] mb-3"
+                  style={{ fontFamily: 'var(--font-sans)' }}
                 >
-                  <Minus size={24} />
-                </button>
-                <span className="text-5xl font-bold text-[color:var(--color-gold-dark)] w-16 text-center">
-                  {attendingCount}
+                  Thank you
+                </p>
+                <p className="text-sm text-warm-gray font-light leading-relaxed">
+                  We understand, and appreciate you letting us know.
+                </p>
+              </>
+            )}
+            <p className="text-[0.65rem] text-warm-gray-light mt-5 tracking-wide">
+              You may revisit this link to amend your response.
+            </p>
+            <div className="flex flex-col gap-3 mt-6">
+              {guest.rsvpStatus === 'confirmed' && (
+                <a
+                  href={googleCalendarUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline flex items-center justify-center gap-2"
+                >
+                  <CalendarPlus size={16} strokeWidth={1.5} />
+                  Add to Calendar
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={startEdit}
+                className="btn-secondary flex items-center justify-center gap-2"
+              >
+                <Pencil size={15} strokeWidth={1.5} />
+                Amend Response
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!showSummary && (
+          <div className="panel py-5">
+            {hasResponded && step === 'view' && (
+              <div className="text-center mb-5">
+                <p className="text-warm-gray-light text-[0.65rem] uppercase tracking-[0.2em] mb-2">
+                  Your response
+                </p>
+                <span className={`status-badge status-${guest.rsvpStatus}`}>
+                  {guest.rsvpStatus === 'confirmed'
+                    ? `Attending${guest.confirmedCount ? ` · ${guest.confirmedCount}` : ''}`
+                    : 'Unable to attend'}
                 </span>
-                <button
-                  type="button"
-                  aria-label="Increase count"
-                  className="w-14 h-14 rounded-full border-2 border-[color:var(--color-gold)] text-[color:var(--color-gold-dark)] flex items-center justify-center hover:bg-[color:var(--color-gold)] hover:text-white transition-colors disabled:opacity-40"
-                  disabled={attendingCount >= guest.invitedCount}
-                  onClick={() => setAttendingCount((c) => Math.min(guest.invitedCount, c + 1))}
-                >
-                  <Plus size={24} />
-                </button>
               </div>
-              <div className="space-y-3">
+            )}
+
+            {step === 'view' && (
+              <div className="space-y-4">
                 <button
                   type="button"
                   className="btn-gold"
                   disabled={submitting}
-                  onClick={() => submitRsvp('confirmed', attendingCount)}
+                  onClick={() => {
+                    if (guest.invitedCount > 1) {
+                      setAttendingCount(guest.confirmedCount ?? guest.invitedCount);
+                      setStep('accept-count');
+                    } else {
+                      submitRsvp('confirmed', 1);
+                    }
+                  }}
                 >
-                  {submitting ? 'Saving...' : 'Confirm'}
+                  Accept with pleasure
                 </button>
                 <button
                   type="button"
-                  className="btn-secondary w-full"
+                  className="btn-outline"
                   disabled={submitting}
-                  onClick={() => setStep('view')}
+                  onClick={() => submitRsvp('declined')}
                 >
-                  Back
+                  Regretfully decline
                 </button>
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
 
-      <div className="mt-8 pt-2">
-        <HeartDivider compact />
-        <ContactDetails />
-        <FindInviteLink />
-      </div>
-    </InvitationFrame>
+            {step === 'accept-count' && (
+              <div>
+                <h2
+                  className="text-xl text-[color:var(--color-gold-dark)] text-center mb-2 font-semibold"
+                  style={{ fontFamily: 'var(--font-sans)' }}
+                >
+                  How many will attend?
+                </h2>
+                <p className="text-center text-warm-gray-light text-[0.65rem] uppercase tracking-[0.15em] mb-7">
+                  Up to {guest.invitedCount} guest{guest.invitedCount > 1 ? 's' : ''}
+                </p>
+                <div className="flex items-center justify-center gap-6 mb-8">
+                  <button
+                    type="button"
+                    aria-label="Decrease count"
+                    className="w-12 h-12 border border-[color:var(--color-gold)] text-[color:var(--color-gold-dark)] flex items-center justify-center hover:bg-[color:var(--color-gold)]/10 transition-colors disabled:opacity-30"
+                    disabled={attendingCount <= 1}
+                    onClick={() => setAttendingCount((c) => Math.max(1, c - 1))}
+                  >
+                    <Minus size={20} strokeWidth={1.5} />
+                  </button>
+                  <span
+                    className="font-display text-4xl text-[color:var(--color-gold-dark)] w-14 text-center"
+                  >
+                    {attendingCount}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="Increase count"
+                    className="w-12 h-12 border border-[color:var(--color-gold)] text-[color:var(--color-gold-dark)] flex items-center justify-center hover:bg-[color:var(--color-gold)]/10 transition-colors disabled:opacity-30"
+                    disabled={attendingCount >= guest.invitedCount}
+                    onClick={() => setAttendingCount((c) => Math.min(guest.invitedCount, c + 1))}
+                  >
+                    <Plus size={20} strokeWidth={1.5} />
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <button
+                    type="button"
+                    className="btn-gold"
+                    disabled={submitting}
+                    onClick={() => submitRsvp('confirmed', attendingCount)}
+                  >
+                    {submitting ? 'Saving...' : 'Confirm attendance'}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-secondary w-full"
+                    disabled={submitting}
+                    onClick={() => setStep('view')}
+                  >
+                    Back
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {hasResponded && (
+          <>
+            <OrnamentalDivider />
+            <ContactDetails />
+          </>
+        )}
+      </InvitationFrame>
+    </InviteExperience>
   );
 }

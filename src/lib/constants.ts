@@ -1,19 +1,23 @@
 export const WEDDING = {
   dateIso: '2026-10-10T15:00:00+05:30',
   dateDisplay: 'Saturday, 10th October 2026',
+  dateWeekday: 'Saturday',
+  dateMonth: 'October',
+  dateDay: '10',
+  dateYear: '2026',
   timeDisplay: '3:00 PM',
   timeDisplayShort: '3 PM Onwards',
-  venue: 'St. Sebastians Church',
+  venue: "St. Sebastian's Church",
   venueAddress: 'Moratuwa, Sri Lanka',
-  venueFull: 'St. Sebastians Church, Moratuwa',
-  mapsUrl: 'https://maps.google.com/?q=St.+Sebastians+Church,+Moratuwa,+Sri+Lanka',
-  rsvpDeadline: '10th September 2026',
+  venueFull: "St. Sebastian's Church, Moratuwa",
+  mapsUrl: 'https://maps.google.com/?q=St.+Sebastian%27s+Church,+Moratuwa,+Sri+Lanka',
+  rsvpDeadline: '20th September 2026',
   refreshmentsNote: 'Refreshments to follow at church premises',
   brideParents: 'Heshan & Sharmila Perera',
   groomParents: 'Eshan & Shyanika Fernando (Late)',
   contacts: [
-    { label: 'Groom (Shavin)', phone: '+94 77 359 2037', tel: 'tel:+94773592037' },
-    { label: 'Bride (Amaya)', phone: '+94 72 230 7420', tel: 'tel:+94722307420' },
+    { label: 'Heshan', phone: '+94 77 267 2644', tel: 'tel:+94772672644' },
+    { label: 'Eshan', phone: '+94 77 323 3602', tel: 'tel:+94773233602' },
   ],
 } as const;
 
@@ -24,8 +28,8 @@ export function googleCalendarUrl(): string {
     action: 'TEMPLATE',
     text: 'Amaya & Shavin — Wedding Ceremony',
     dates: `${start}/${end}`,
-    details: 'Wedding ceremony at St. Sebastians Church, Moratuwa. We look forward to celebrating with you!',
-    location: 'St. Sebastians Church, Moratuwa, Sri Lanka',
+    details: "Wedding ceremony at St. Sebastian's Church, Moratuwa. We look forward to celebrating with you!",
+    location: "St. Sebastian's Church, Moratuwa, Sri Lanka",
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }

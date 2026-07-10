@@ -7,11 +7,6 @@ export type GuestPublic = {
   respondedAt: string | null;
 };
 
-export type GuestSearchResult = {
-  displayName: string;
-  slug: string;
-};
-
 export type GuestAdmin = GuestPublic & {
   id: string;
   firstName: string;
@@ -45,8 +40,13 @@ type GuestRowPublic = Pick<
 >;
 
 export function displayName(firstName: string, lastName: string): string {
-  const first = firstName.trim();
-  const last = lastName.trim();
+  const format = (part: string) => {
+    const trimmed = part.trim();
+    if (!trimmed) return '';
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+  };
+  const first = format(firstName);
+  const last = format(lastName);
   if (!first && !last) return 'Friend';
   return [first, last].filter(Boolean).join(' ');
 }
