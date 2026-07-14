@@ -94,7 +94,7 @@ export function MusicToggle() {
       onClick={toggle}
       aria-label={muted ? 'Unmute music' : 'Mute music'}
       aria-pressed={muted}
-      className="fixed bottom-4 right-4 z-[60] flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--color-gold-light)] bg-white/80 text-[color:var(--color-gold-dark)] shadow-sm transition-colors hover:bg-white hover:border-[color:var(--color-gold)]"
+      className="fixed bottom-4 right-4 z-[60] flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--color-gold-light)]/70 bg-[color:var(--color-cream)]/90 text-[color:var(--color-gold-dark)] shadow-sm transition-colors hover:bg-[color:var(--color-cream)] hover:border-[color:var(--color-gold)]"
     >
       {muted ? <VolumeX size={16} strokeWidth={1.75} /> : <Volume2 size={16} strokeWidth={1.75} />}
     </button>

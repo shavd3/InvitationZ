@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { InvitationCard, OrnamentalDivider } from '@/components/Floral';
 import { FloralBackground } from '@/components/FloralBackground';
+import { CoupleNames } from '@/components/InviteLayout';
 
 const HOLD_MS = 3200;
 const FADE_MS = 1200;
@@ -31,68 +33,69 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 overflow-hidden bg-white transition-opacity duration-[1200ms] ease-out ${
+      className={`fixed inset-0 z-50 overflow-hidden bg-[#fdf8f2] transition-opacity duration-[1200ms] ease-out ${
         closing ? 'opacity-0' : 'opacity-100'
       }`}
       role="presentation"
       aria-hidden="true"
     >
-      <FloralBackground />
+      <FloralBackground
+        src="/backgrounds/main-bg.svg"
+        scrimClassName="absolute inset-0 bg-gradient-to-b from-[#fdf8f2]/35 via-[#f5ebe0]/18 to-[#ede4d6]/30"
+      />
 
-      {/* Content revealed behind opening panels */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          className={`flex flex-col items-center px-6 transition-all duration-[1000ms] ease-out ${
-            contentVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.97]'
-          }`}
-        >
-          <p
-            className={`text-[0.6rem] sm:text-xs uppercase tracking-[0.35em] text-warm-gray-light mb-5 transition-all duration-[800ms] ease-out ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
-            style={{
-              fontFamily: 'var(--font-body)',
-              transitionDelay: contentVisible ? '200ms' : '0ms',
-            }}
-          >
-            You are cordially invited
-          </p>
-
-          <h1
-            className={`font-display text-5xl sm:text-6xl text-foil text-center leading-tight transition-all duration-[900ms] ease-out ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-            }`}
-            style={{ transitionDelay: contentVisible ? '450ms' : '0ms' }}
-          >
-            Amaya &amp; Shavin
-          </h1>
-
+      <div className="relative max-w-md mx-auto px-4 min-h-screen flex items-center justify-center">
+        <InvitationCard>
           <div
-            className={`flex items-center gap-3 mt-7 transition-all duration-[800ms] ease-out ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            className={`flex flex-col items-center text-center transition-all duration-[1000ms] ease-out ${
+              contentVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.97]'
             }`}
-            style={{ transitionDelay: contentVisible ? '700ms' : '0ms' }}
           >
-            <span className="h-px w-10 sm:w-14 bg-[color:var(--color-gold-light)]" />
-            <span className="text-[color:var(--color-gold)] text-xs">✦</span>
-            <span className="h-px w-10 sm:w-14 bg-[color:var(--color-gold-light)]" />
-          </div>
+            <p
+              className={`uppercase tracking-[0.3em] text-xs sm:text-sm text-warm-gray-light font-medium text-shadow-soft mb-6 transition-all duration-[800ms] ease-out ${
+                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
+              style={{
+                fontFamily: 'var(--font-body)',
+                transitionDelay: contentVisible ? '200ms' : '0ms',
+              }}
+            >
+              You are cordially invited
+            </p>
 
-          <p
-            className={`mt-5 text-[0.6rem] sm:text-[0.65rem] uppercase tracking-[0.3em] text-warm-gray-light transition-all duration-[800ms] ease-out ${
-              contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
-            style={{
-              fontFamily: 'var(--font-body)',
-              transitionDelay: contentVisible ? '900ms' : '0ms',
-            }}
-          >
-            10th October 2026
-          </p>
-        </div>
+            <div
+              className={`transition-all duration-[900ms] ease-out ${
+                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+              }`}
+              style={{ transitionDelay: contentVisible ? '450ms' : '0ms' }}
+            >
+              <CoupleNames />
+            </div>
+
+            <div
+              className={`transition-all duration-[800ms] ease-out ${
+                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
+              style={{ transitionDelay: contentVisible ? '700ms' : '0ms' }}
+            >
+              <OrnamentalDivider />
+            </div>
+
+            <p
+              className={`mt-2 uppercase tracking-[0.22em] text-xs sm:text-sm text-warm-gray-light font-medium text-shadow-soft transition-all duration-[800ms] ease-out ${
+                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+              }`}
+              style={{
+                fontFamily: 'var(--font-body)',
+                transitionDelay: contentVisible ? '900ms' : '0ms',
+              }}
+            >
+              10th October 2026
+            </p>
+          </div>
+        </InvitationCard>
       </div>
 
-      {/* Split panels — card opening effect */}
       <div
         className={`reveal-panel reveal-panel-left ${panelsOpen ? 'reveal-panel-open' : ''}`}
       />

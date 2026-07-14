@@ -88,7 +88,7 @@ export default function RsvpPage() {
     return (
       <InviteExperience>
         <InvitationFrame>
-          <p className="text-center text-warm-gray-light text-sm tracking-widest uppercase">
+          <p className="text-center text-warm-gray-muted text-sm tracking-widest uppercase">
             Loading your invitation...
           </p>
         </InvitationFrame>
@@ -102,7 +102,7 @@ export default function RsvpPage() {
         <InvitationFrame>
           <div className="text-center">
             <p className="text-base text-warm-gray mb-4">{error}</p>
-            <p className="text-[0.65rem] text-warm-gray-light tracking-wide leading-relaxed">
+            <p className="text-[0.65rem] text-warm-gray-muted tracking-wide leading-relaxed">
               Please open the personal invitation link sent to you.
             </p>
           </div>
@@ -127,12 +127,12 @@ export default function RsvpPage() {
 
         <EventDetails showDirections={guest.rsvpStatus === 'confirmed'} />
 
-        <p className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal leading-relaxed">
+        <p className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-muted font-normal leading-relaxed">
           {WEDDING.refreshmentsNote}
         </p>
 
         {!hasResponded && (
-          <p className="text-center text-[0.65rem] sm:text-xs text-warm-gray-light tracking-wide">
+          <p className="text-center text-[0.65rem] sm:text-xs text-warm-gray-muted tracking-wide">
             Kindly respond by{' '}
             <span className="text-[color:var(--color-gold-dark)] font-medium">
               {WEDDING.rsvpDeadline}
@@ -153,7 +153,7 @@ export default function RsvpPage() {
                 <p className="font-display text-2xl text-foil mb-3">
                   With gratitude
                 </p>
-                <p className="text-sm text-warm-gray font-light leading-relaxed mb-1">
+                <p className="text-sm text-warm-gray-light font-light leading-relaxed mb-1">
                   We are honoured you will join us
                   {guest.confirmedCount && guest.confirmedCount > 1
                     ? ` with ${guest.confirmedCount} guests`
@@ -169,12 +169,12 @@ export default function RsvpPage() {
                 >
                   Thank you
                 </p>
-                <p className="text-sm text-warm-gray font-light leading-relaxed">
+                <p className="text-sm text-warm-gray-light font-light leading-relaxed">
                   We understand, and appreciate you letting us know.
                 </p>
               </>
             )}
-            <p className="text-[0.65rem] text-warm-gray-light mt-5 tracking-wide">
+            <p className="text-[0.65rem] text-warm-gray-muted mt-5 tracking-wide">
               You may revisit this link to amend your response.
             </p>
             <div className="flex flex-col gap-3 mt-6">
@@ -205,7 +205,7 @@ export default function RsvpPage() {
           <div className="panel py-5">
             {hasResponded && step === 'view' && (
               <div className="text-center mb-5">
-                <p className="text-warm-gray-light text-[0.65rem] uppercase tracking-[0.2em] mb-2">
+                <p className="text-warm-gray-muted text-[0.65rem] uppercase tracking-[0.2em] mb-2">
                   Your response
                 </p>
                 <span className={`status-badge status-${guest.rsvpStatus}`}>
@@ -252,7 +252,7 @@ export default function RsvpPage() {
                 >
                   How many will attend?
                 </h2>
-                <p className="text-center text-warm-gray-light text-[0.65rem] uppercase tracking-[0.15em] mb-7">
+                <p className="text-center text-warm-gray-muted text-[0.65rem] uppercase tracking-[0.15em] mb-7">
                   Up to {guest.invitedCount} guest{guest.invitedCount > 1 ? 's' : ''}
                 </p>
                 <div className="flex items-center justify-center gap-6 mb-8">

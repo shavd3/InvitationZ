@@ -35,7 +35,7 @@ export function InviteExperience({ children }: InviteExperienceProps) {
       <InviteAudio onReady={handleMusicReady} />
       <MusicToggle />
       {!checked ? (
-        <div className="min-h-screen bg-white" />
+        <div className="min-h-screen bg-[color:var(--color-cream)]" />
       ) : (
         <>
           {showReveal && <RevealOverlay onComplete={handleRevealComplete} />}

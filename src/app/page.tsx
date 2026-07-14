@@ -12,7 +12,7 @@ export default function HomePage() {
 
       <EventDetails />
 
-      <p className="text-center text-[0.65rem] text-warm-gray-light/70 tracking-wide leading-relaxed">
+      <p className="text-center text-[0.65rem] text-warm-gray-muted tracking-wide leading-relaxed">
         Please open the personal invitation link sent to you to view your invitation and RSVP.
       </p>
     </InvitationFrame>

@@ -13,38 +13,38 @@ export function ParentsBlessing({ inviteeName }: { inviteeName?: string }) {
   return (
     <div className="text-center leading-relaxed">
       <p
-        className="uppercase tracking-[0.2em] text-[0.65rem] sm:text-xs text-warm-gray font-medium"
+        className="uppercase tracking-[0.2em] text-xs sm:text-sm text-warm-gray font-medium text-shadow-soft"
         style={{ fontFamily: 'var(--font-body)' }}
       >
         {WEDDING.brideParents}
       </p>
       <p
-        className="uppercase tracking-[0.25em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal my-3"
-        style={{ fontFamily: 'var(--font-body)' }}
+        className="italic tracking-[0.06em] text-sm sm:text-base text-[#6b4f28] font-medium my-4 text-shadow-soft"
+        style={{ fontFamily: 'var(--font-display)' }}
       >
-        Together With
+        together with
       </p>
       <p
-        className="uppercase tracking-[0.2em] text-[0.65rem] sm:text-xs text-warm-gray font-medium"
+        className="uppercase tracking-[0.2em] text-xs sm:text-sm text-warm-gray font-medium text-shadow-soft"
         style={{ fontFamily: 'var(--font-body)' }}
       >
         {WEDDING.groomParents}
       </p>
       {inviteeName ? (
-        <div className="mt-6">
+        <div className="mt-7">
           <p
-            className="uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal"
+            className="uppercase tracking-[0.18em] text-xs sm:text-sm text-warm-gray-light font-medium text-shadow-soft"
             style={{ fontFamily: 'var(--font-body)' }}
           >
             Invite
           </p>
           <p
-            className="font-display text-xl sm:text-2xl text-[color:var(--color-gold-dark)] my-3 tracking-normal"
+            className="font-display text-2xl sm:text-3xl text-[color:var(--color-gold-dark)] my-4 tracking-normal text-shadow-soft"
           >
             {inviteeName}
           </p>
           <p
-            className="uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal"
+            className="uppercase tracking-[0.16em] text-xs sm:text-sm text-warm-gray-light font-medium leading-relaxed text-shadow-soft"
             style={{ fontFamily: 'var(--font-body)' }}
           >
             to the Wedding Ceremony of Their Children
@@ -52,7 +52,7 @@ export function ParentsBlessing({ inviteeName }: { inviteeName?: string }) {
         </div>
       ) : (
         <p
-          className="uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal mt-6"
+          className="uppercase tracking-[0.16em] text-xs sm:text-sm text-warm-gray-light font-medium mt-7 leading-relaxed text-shadow-soft"
           style={{ fontFamily: 'var(--font-body)' }}
         >
           Invite You to the Wedding Ceremony of Their Children
@@ -76,17 +76,17 @@ export function EventDetails({
         aria-label={WEDDING.dateDisplay}
       >
         <div className="flex min-w-0 flex-1 flex-col justify-center px-1 sm:px-2">
-          <span className="mx-auto h-px w-full max-w-[4.5rem] bg-[color:var(--color-gold-light)]/70" />
+          <span className="mx-auto h-px w-full max-w-[4.5rem] bg-[color:var(--color-gold-light)]/55" />
           <p
             className="py-3 text-center text-[0.65rem] sm:text-xs font-medium uppercase leading-snug tracking-[0.16em] text-warm-gray"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
             {WEDDING.dateWeekday}
           </p>
-          <span className="mx-auto h-px w-full max-w-[4.5rem] bg-[color:var(--color-gold-light)]/70" />
+          <span className="mx-auto h-px w-full max-w-[4.5rem] bg-[color:var(--color-gold-light)]/55" />
         </div>
 
-        <span className="w-px shrink-0 self-stretch bg-[color:var(--color-gold-light)]/70" aria-hidden="true" />
+        <span className="w-px shrink-0 self-stretch bg-[color:var(--color-gold-light)]/55" aria-hidden="true" />
 
         <div className="flex shrink-0 flex-col items-center justify-center px-4 sm:px-6">
           <p
@@ -106,25 +106,24 @@ export function EventDetails({
           </p>
         </div>
 
-        <span className="w-px shrink-0 self-stretch bg-[color:var(--color-gold-light)]/70" aria-hidden="true" />
+        <span className="w-px shrink-0 self-stretch bg-[color:var(--color-gold-light)]/55" aria-hidden="true" />
 
         <div className="flex min-w-0 flex-1 flex-col justify-center px-1 sm:px-2">
-          <span className="mx-auto h-px w-full max-w-[5.5rem] bg-[color:var(--color-gold-light)]/70" />
+          <span className="mx-auto h-px w-full max-w-[5.5rem] bg-[color:var(--color-gold-light)]/55" />
           <p
-            className="py-2 text-center font-medium uppercase text-warm-gray"
+            className="py-3 text-center font-medium uppercase text-warm-gray"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
-            <span className="block text-[0.6rem] sm:text-xs tracking-[0.2em]">At</span>
-            <span className="mt-1 block text-base sm:text-lg leading-tight tracking-[0.06em]">
+            <span className="block text-base sm:text-lg leading-tight tracking-[0.06em]">
               {WEDDING.timeDisplay}
             </span>
           </p>
-          <span className="mx-auto h-px w-full max-w-[5.5rem] bg-[color:var(--color-gold-light)]/70" />
+          <span className="mx-auto h-px w-full max-w-[5.5rem] bg-[color:var(--color-gold-light)]/55" />
         </div>
       </div>
 
       <p
-        className={`uppercase tracking-[0.3em] text-[0.6rem] text-warm-gray-light font-normal ${compact ? 'mt-4' : 'mt-6'}`}
+        className={`uppercase tracking-[0.3em] text-[0.6rem] text-warm-gray-muted font-normal ${compact ? 'mt-4' : 'mt-6'}`}
         style={{ fontFamily: 'var(--font-body)' }}
       >
         At
@@ -154,7 +153,7 @@ export function EventDetails({
 export function RefreshmentsNote() {
   return (
     <p
-      className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-light font-normal leading-relaxed"
+      className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-muted font-normal leading-relaxed"
       style={{ fontFamily: 'var(--font-body)' }}
     >
       {WEDDING.refreshmentsNote}
@@ -166,7 +165,7 @@ export function ContactDetails() {
   return (
     <div className="text-center space-y-3 pt-2">
       <p
-        className="text-warm-gray-light text-[0.65rem] tracking-[0.2em] uppercase font-normal"
+        className="text-warm-gray-muted text-[0.65rem] tracking-[0.2em] uppercase font-normal"
         style={{ fontFamily: 'var(--font-body)' }}
       >
         Enquiries
