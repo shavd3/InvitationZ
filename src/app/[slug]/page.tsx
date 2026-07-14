@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Minus, Plus, CalendarPlus, Pencil } from 'lucide-react';
 import { InvitationFrame, OrnamentalDivider } from '@/components/Floral';
+import { startInviteMusic } from '@/components/InviteAudio';
 import { InviteExperience } from '@/components/InviteExperience';
 import {
   CoupleNames,
@@ -183,6 +184,7 @@ export default function RsvpPage() {
                   href={googleCalendarUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={startInviteMusic}
                   className="btn-outline flex items-center justify-center gap-2"
                 >
                   <CalendarPlus size={16} strokeWidth={1.5} />
@@ -223,6 +225,7 @@ export default function RsvpPage() {
                   className="btn-gold"
                   disabled={submitting}
                   onClick={() => {
+                    startInviteMusic();
                     if (guest.invitedCount > 1) {
                       setAttendingCount(guest.confirmedCount ?? guest.invitedCount);
                       setStep('accept-count');
@@ -237,7 +240,10 @@ export default function RsvpPage() {
                   type="button"
                   className="btn-outline"
                   disabled={submitting}
-                  onClick={() => submitRsvp('declined')}
+                  onClick={() => {
+                    startInviteMusic();
+                    submitRsvp('declined');
+                  }}
                 >
                   Regretfully decline
                 </button>
@@ -285,7 +291,10 @@ export default function RsvpPage() {
                     type="button"
                     className="btn-gold"
                     disabled={submitting}
-                    onClick={() => submitRsvp('confirmed', attendingCount)}
+                    onClick={() => {
+                      startInviteMusic();
+                      submitRsvp('confirmed', attendingCount);
+                    }}
                   >
                     {submitting ? 'Saving...' : 'Confirm attendance'}
                   </button>

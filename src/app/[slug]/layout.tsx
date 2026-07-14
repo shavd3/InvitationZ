@@ -11,26 +11,15 @@ const inviteMusicBoot = `
   window.__inviteAudio = audio;
 
   function tryPlay() {
-    return audio.play().catch(function () {});
+    if (audio.muted || !audio.paused) return;
+    audio.play().catch(function () {});
   }
 
-  tryPlay();
-
-  var attempts = 0;
-  var burst = window.setInterval(function () {
-    tryPlay();
-    attempts += 1;
-    if (!audio.paused || attempts >= 30) {
-      window.clearInterval(burst);
-    }
-  }, 50);
-
-  window.setTimeout(function () {
-    window.clearInterval(burst);
-  }, 1600);
-
-  document.addEventListener('pointerdown', tryPlay, { once: true, passive: true });
-  document.addEventListener('keydown', tryPlay, { once: true });
+  var unlockOpts = { capture: true, passive: true };
+  document.addEventListener('pointerdown', tryPlay, unlockOpts);
+  document.addEventListener('touchstart', tryPlay, unlockOpts);
+  document.addEventListener('click', tryPlay, unlockOpts);
+  document.addEventListener('keydown', tryPlay);
 })();
 `;
 

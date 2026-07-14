@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { startInviteMusic } from '@/components/InviteAudio';
 import { InvitationCard, OrnamentalDivider } from '@/components/Floral';
 import { FloralBackground } from '@/components/FloralBackground';
 import { CoupleNames } from '@/components/InviteLayout';
@@ -38,6 +39,7 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
       }`}
       role="presentation"
       aria-hidden="true"
+      onPointerDown={startInviteMusic}
     >
       <FloralBackground
         src="/backgrounds/main-bg.svg"

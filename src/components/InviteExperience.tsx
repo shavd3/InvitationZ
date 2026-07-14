@@ -14,8 +14,8 @@ export function InviteExperience({ children }: InviteExperienceProps) {
   const [ready, setReady] = useState(false);
   const [checked, setChecked] = useState(false);
 
-  const handleMusicReady = useCallback((controls: InviteMusicControls) => {
-    void controls.start();
+  const handleMusicReady = useCallback((_controls: InviteMusicControls) => {
+    // Music starts on first user interaction only (browser autoplay policy).
   }, []);
 
   useEffect(() => {

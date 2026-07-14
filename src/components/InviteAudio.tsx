@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
 export type InviteMusicControls = {
-  start: () => Promise<boolean>;
+  start: () => boolean;
 };
 
 type InviteAudioProps = {
@@ -19,45 +19,48 @@ export function getInviteAudio(): HTMLAudioElement | null {
   return window.__inviteAudio ?? null;
 }
 
+/** Invoke inside a user-gesture handler; play() rejections are swallowed. */
+export function startInviteMusic(): void {
+  const audio = getInviteAudio();
+  if (!audio || audio.muted) return;
+
+  audio.volume = DEFAULT_VOLUME;
+  audio.loop = true;
+
+  if (!audio.paused) return;
+
+  audio.play().catch(() => {});
+}
+
 export function InviteAudio({ onReady }: InviteAudioProps) {
-  const start = useCallback(async () => {
-    const audio = getInviteAudio();
-    if (!audio) return false;
-
-    audio.volume = DEFAULT_VOLUME;
-    audio.loop = true;
-
-    try {
-      if (audio.paused) {
-        await audio.play();
-      }
-      return true;
-    } catch {
-      return false;
-    }
-  }, []);
-
   useEffect(() => {
     const audio = getInviteAudio();
     if (audio && sessionStorage.getItem(MUTED_KEY) === '1') {
       audio.muted = true;
     }
 
-    onReady?.({ start });
-    void start();
+    onReady?.({ start: () => {
+      startInviteMusic();
+      return true;
+    } });
 
     const unlock = () => {
-      void start();
+      startInviteMusic();
     };
 
-    window.addEventListener('pointerdown', unlock, { passive: true });
-    window.addEventListener('keydown', unlock);
+    const opts: AddEventListenerOptions = { capture: true, passive: true };
+    document.addEventListener('pointerdown', unlock, opts);
+    document.addEventListener('touchstart', unlock, opts);
+    document.addEventListener('click', unlock, opts);
+    document.addEventListener('keydown', unlock);
 
     return () => {
-      window.removeEventListener('pointerdown', unlock);
-      window.removeEventListener('keydown', unlock);
+      document.removeEventListener('pointerdown', unlock, opts);
+      document.removeEventListener('touchstart', unlock, opts);
+      document.removeEventListener('click', unlock, opts);
+      document.removeEventListener('keydown', unlock);
     };
-  }, [onReady, start]);
+  }, [onReady]);
 
   return null;
 }
@@ -82,9 +85,8 @@ export function MusicToggle() {
     sessionStorage.setItem(MUTED_KEY, nextMuted ? '1' : '0');
     setMuted(nextMuted);
 
-    if (!nextMuted && audio.paused) {
-      audio.volume = DEFAULT_VOLUME;
-      void audio.play().catch(() => {});
+    if (!nextMuted) {
+      startInviteMusic();
     }
   }, []);
 

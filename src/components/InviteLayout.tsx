@@ -1,5 +1,29 @@
 import { MapPin, Phone } from 'lucide-react';
+import { startInviteMusic } from '@/components/InviteAudio';
 import { WEDDING } from '@/lib/constants';
+
+function ParentLine({ name }: { name: string }) {
+  const lateMatch = name.match(/^(.+?)\s*\(Late\)$/i);
+  const lineClass =
+    'uppercase tracking-[0.2em] text-xs sm:text-sm text-warm-gray font-medium text-shadow-soft';
+
+  if (lateMatch) {
+    return (
+      <p className={lineClass} style={{ fontFamily: 'var(--font-body)' }}>
+        {lateMatch[1]}{' '}
+        <span className="inline text-[0.72em] tracking-[0.14em] align-baseline whitespace-nowrap">
+          (Late)
+        </span>
+      </p>
+    );
+  }
+
+  return (
+    <p className={lineClass} style={{ fontFamily: 'var(--font-body)' }}>
+      {name}
+    </p>
+  );
+}
 
 export function CoupleNames() {
   return (
@@ -12,24 +36,14 @@ export function CoupleNames() {
 export function ParentsBlessing({ inviteeName }: { inviteeName?: string }) {
   return (
     <div className="text-center leading-relaxed">
-      <p
-        className="uppercase tracking-[0.2em] text-xs sm:text-sm text-warm-gray font-medium text-shadow-soft"
-        style={{ fontFamily: 'var(--font-body)' }}
-      >
-        {WEDDING.brideParents}
-      </p>
+      <ParentLine name={WEDDING.brideParents} />
       <p
         className="italic tracking-[0.06em] text-sm sm:text-base text-[#6b4f28] font-medium my-4 text-shadow-soft"
         style={{ fontFamily: 'var(--font-display)' }}
       >
         together with
       </p>
-      <p
-        className="uppercase tracking-[0.2em] text-xs sm:text-sm text-warm-gray font-medium text-shadow-soft"
-        style={{ fontFamily: 'var(--font-body)' }}
-      >
-        {WEDDING.groomParents}
-      </p>
+      <ParentLine name={WEDDING.groomParents} />
       {inviteeName ? (
         <div className="mt-7">
           <p
@@ -140,6 +154,7 @@ export function EventDetails({
           href={WEDDING.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={startInviteMusic}
           className="btn-secondary inline-flex items-center gap-2 text-[0.65rem] py-2 px-5"
         >
           <MapPin size={14} />
@@ -175,6 +190,7 @@ export function ContactDetails() {
           <a
             key={c.tel}
             href={c.tel}
+            onClick={startInviteMusic}
             className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-gold-dark)] hover:underline tracking-wide"
             style={{ fontFamily: 'var(--font-sans)' }}
           >
