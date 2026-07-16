@@ -62,7 +62,9 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
                 transitionDelay: contentVisible ? '200ms' : '0ms',
               }}
             >
-              You are cordially invited
+              You&apos;re cordially invited
+              <br />
+              to the wedding of
             </p>
 
             <div
@@ -82,18 +84,6 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
             >
               <OrnamentalDivider />
             </div>
-
-            <p
-              className={`mt-2 uppercase tracking-[0.22em] text-xs sm:text-sm text-warm-gray-light font-medium text-shadow-soft transition-all duration-[800ms] ease-out ${
-                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-              }`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                transitionDelay: contentVisible ? '900ms' : '0ms',
-              }}
-            >
-              10th October 2026
-            </p>
           </div>
         </InvitationCard>
       </div>

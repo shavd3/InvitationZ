@@ -222,7 +222,7 @@ export default function RsvpPage() {
               <div className="space-y-4">
                 <button
                   type="button"
-                  className="btn-gold"
+                  className="btn-pearl"
                   disabled={submitting}
                   onClick={() => {
                     startInviteMusic();
@@ -289,7 +289,7 @@ export default function RsvpPage() {
                 <div className="space-y-4">
                   <button
                     type="button"
-                    className="btn-gold"
+                    className="btn-pearl"
                     disabled={submitting}
                     onClick={() => {
                       startInviteMusic();

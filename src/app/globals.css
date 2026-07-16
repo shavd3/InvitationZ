@@ -217,10 +217,83 @@ h1, h2, h3, h4 {
   cursor: not-allowed;
 }
 
+/* RSVP primary — bright cream stationery with pearl light sweep */
+.btn-pearl {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fffdf9 0%, #faf3e8 55%, #f5ebdc 100%);
+  color: #6b5234;
+  padding: 0.9375rem 1.5rem;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition:
+    background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    letter-spacing 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  border: 1px solid #c9a875;
+  width: 100%;
+  text-align: center;
+  display: block;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 2px 12px rgba(184, 149, 106, 0.1);
+}
+
+.btn-pearl::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -45%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 30%,
+    rgba(255, 255, 255, 0.75) 48%,
+    rgba(236, 214, 170, 0.45) 58%,
+    transparent 100%
+  );
+  animation: pearl-sweep 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pearl-sweep {
+  0%, 12% { left: -45%; }
+  52%, 100% { left: 120%; }
+}
+
+.btn-pearl:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffffff 0%, #fbf6ee 55%, #f7efdf 100%);
+  border-color: #d4b484;
+  color: #5c4322;
+  letter-spacing: 0.21em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 5px 20px rgba(184, 149, 106, 0.16);
+}
+
+.btn-pearl:active:not(:disabled) {
+  background: linear-gradient(180deg, #f7efdf 0%, #f0e6d4 100%);
+  transition-duration: 0.15s;
+}
+
+.btn-pearl:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* RSVP secondary — soft outline, clearly tappable but still below Accept */
 .btn-outline {
-  background: rgba(255, 255, 255, 0.35);
-  color: var(--color-gold-dark);
-  border: 1px solid var(--color-gold);
+  background: rgba(255, 255, 255, 0.4);
+  color: #7d6f5f;
+  border: 1px solid rgba(184, 149, 106, 0.55);
   padding: 0.9375rem 1.5rem;
   border-radius: 3px;
   font-weight: 500;
@@ -240,17 +313,15 @@ h1, h2, h3, h4 {
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: rgba(253, 248, 242, 0.75);
-  border-color: var(--color-gold-light);
-  color: #745a38;
-  letter-spacing: 0.21em;
-  box-shadow:
-    0 4px 20px rgba(184, 149, 106, 0.14),
-    inset 0 0 0 1px rgba(204, 177, 129, 0.2);
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(184, 149, 106, 0.75);
+  color: #6b5234;
+  letter-spacing: 0.2em;
+  box-shadow: 0 3px 14px rgba(184, 149, 106, 0.1);
 }
 
 .btn-outline:active:not(:disabled) {
-  background: rgba(184, 149, 106, 0.1);
+  background: rgba(184, 149, 106, 0.08);
   transition-duration: 0.15s;
 }
 
@@ -394,6 +465,174 @@ input:focus {
   transform: translateX(100%);
 }
 
+/* 10.10.10 easter egg — triple-tap the day number */
+.date-ten-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(253, 248, 242, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.7s ease;
+}
+
+.date-ten-overlay--fade {
+  opacity: 0;
+}
+
+.date-ten-popup {
+  text-align: center;
+  padding: 1.5rem 2rem;
+}
+
+.date-ten-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(2.75rem, 10vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+.date-ten-row .date-ten-part {
+  background: linear-gradient(
+    120deg,
+    #5c4322 0%,
+    #7a5c32 20%,
+    #a9793f 38%,
+    #c9a06a 50%,
+    #a9793f 62%,
+    #7a5c32 80%,
+    #5c4322 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.date-ten-part {
+  display: inline-block;
+}
+
+.date-ten-prefix {
+  opacity: 0;
+  transform: scale(0.85) translateY(8px);
+}
+
+.date-ten-overlay--show-prefix .date-ten-prefix,
+.date-ten-overlay--show-year .date-ten-prefix,
+.date-ten-overlay--overlap .date-ten-prefix,
+.date-ten-overlay--reveal .date-ten-prefix,
+.date-ten-overlay--fade .date-ten-prefix {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition:
+    opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.date-ten-year-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: baseline;
+}
+
+.date-ten-digits {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.06em;
+  transition: gap 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.date-ten-digit {
+  display: inline-block;
+  opacity: 0;
+  transform: scale(0.85);
+  margin-left: 0;
+  transition:
+    opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    margin-left 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-delay: calc(var(--i) * 0.07s);
+}
+
+.date-ten-overlay--show-year .date-ten-digit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Digits pull together into one stack, same baseline */
+.date-ten-overlay--overlap .date-ten-digits {
+  gap: 0;
+}
+
+.date-ten-overlay--overlap .date-ten-digit {
+  opacity: calc(1 - var(--i) * 0.12);
+  transform: scale(1);
+}
+
+.date-ten-overlay--overlap .date-ten-digit:not(:first-child) {
+  margin-left: -0.58em;
+}
+
+.date-ten-overlay--reveal .date-ten-digits,
+.date-ten-overlay--fade .date-ten-digits {
+  gap: 0;
+}
+
+.date-ten-overlay--reveal .date-ten-digit,
+.date-ten-overlay--fade .date-ten-digit {
+  opacity: 0;
+  transform: scale(0.55);
+  filter: blur(1.5px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease,
+    filter 0.55s ease,
+    margin-left 0.55s ease;
+}
+
+.date-ten-overlay--reveal .date-ten-digit:not(:first-child),
+.date-ten-overlay--fade .date-ten-digit:not(:first-child) {
+  margin-left: -0.58em;
+}
+
+.date-ten-sum {
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: 1;
+  opacity: 0;
+  transform: scale(1.25);
+  transform-origin: left center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.date-ten-overlay--reveal .date-ten-sum,
+.date-ten-overlay--fade .date-ten-sum {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.12s,
+    transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.12s;
+}
+
+/* Keep wrap width for "10" once digits vanish */
+.date-ten-overlay--reveal .date-ten-year-wrap,
+.date-ten-overlay--fade .date-ten-year-wrap {
+  min-width: 1.05em;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .invite-content-visible {
     transition: none;
@@ -410,7 +649,20 @@ input:focus {
     background-position: 50% center;
   }
 
+  .btn-pearl::after {
+    animation: none;
+    display: none;
+  }
+
   .reveal-panel {
     transition: none;
+  }
+
+  .date-ten-prefix,
+  .date-ten-digit,
+  .date-ten-sum,
+  .date-ten-year-wrap,
+  .date-ten-overlay {
+    transition: none !important;
   }
 }

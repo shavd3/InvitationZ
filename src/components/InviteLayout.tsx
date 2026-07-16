@@ -1,5 +1,6 @@
 import { MapPin, Phone } from 'lucide-react';
 import { startInviteMusic } from '@/components/InviteAudio';
+import { DateTenEasterEgg } from '@/components/DateTenEasterEgg';
 import { WEDDING } from '@/lib/constants';
 
 function ParentLine({ name }: { name: string }) {
@@ -109,9 +110,7 @@ export function EventDetails({
           >
             {WEDDING.dateMonth}
           </p>
-          <p className="font-display my-1 text-6xl sm:text-7xl leading-none tracking-tight text-foil">
-            {WEDDING.dateDay}
-          </p>
+          <DateTenEasterEgg />
           <p
             className="text-base sm:text-lg font-medium uppercase tracking-[0.2em] text-warm-gray"
             style={{ fontFamily: 'var(--font-sans)' }}
