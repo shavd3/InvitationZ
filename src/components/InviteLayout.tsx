@@ -1,5 +1,4 @@
 import { MapPin, Phone } from 'lucide-react';
-import { startInviteMusic } from '@/components/InviteAudio';
 import { DateTenEasterEgg } from '@/components/DateTenEasterEgg';
 import { WEDDING } from '@/lib/constants';
 
@@ -153,7 +152,6 @@ export function EventDetails({
           href={WEDDING.mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={startInviteMusic}
           className="btn-secondary inline-flex items-center gap-2 text-[0.65rem] py-2 px-5"
         >
           <MapPin size={14} />
@@ -189,7 +187,6 @@ export function ContactDetails() {
           <a
             key={c.tel}
             href={c.tel}
-            onClick={startInviteMusic}
             className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--color-gold-dark)] hover:underline tracking-wide"
             style={{ fontFamily: 'var(--font-sans)' }}
           >

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Minus, Plus, CalendarPlus, Pencil } from 'lucide-react';
 import { InvitationFrame, OrnamentalDivider } from '@/components/Floral';
-import { startInviteMusic } from '@/components/InviteAudio';
 import { InviteExperience } from '@/components/InviteExperience';
 import {
   CoupleNames,
@@ -13,7 +12,7 @@ import {
   ContactDetails,
 } from '@/components/InviteLayout';
 import { WEDDING, googleCalendarUrl } from '@/lib/constants';
-import type { GuestPublic } from '@/lib/guest';
+import { seatsAllowed, type GuestPublic } from '@/lib/guest';
 
 type Step = 'view' | 'accept-count';
 
@@ -41,7 +40,7 @@ export default function RsvpPage() {
         }
         const data: GuestPublic = await res.json();
         setGuest(data);
-        setAttendingCount(data.confirmedCount ?? data.invitedCount ?? 1);
+        setAttendingCount(data.confirmedCount ?? seatsAllowed(data.invitedCount));
         setEditing(data.rsvpStatus === 'pending');
       } catch {
         setError('Unable to load invitation. Please check your connection.');
@@ -116,6 +115,7 @@ export default function RsvpPage() {
 
   const hasResponded = guest.rsvpStatus !== 'pending';
   const showSummary = hasResponded && !editing && step !== 'accept-count';
+  const maxSeats = seatsAllowed(guest.invitedCount);
 
   return (
     <InviteExperience>
@@ -184,7 +184,6 @@ export default function RsvpPage() {
                   href={googleCalendarUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={startInviteMusic}
                   className="btn-outline flex items-center justify-center gap-2"
                 >
                   <CalendarPlus size={16} strokeWidth={1.5} />
@@ -225,9 +224,8 @@ export default function RsvpPage() {
                   className="btn-pearl"
                   disabled={submitting}
                   onClick={() => {
-                    startInviteMusic();
-                    if (guest.invitedCount > 1) {
-                      setAttendingCount(guest.confirmedCount ?? guest.invitedCount);
+                    if (maxSeats > 1) {
+                      setAttendingCount(guest.confirmedCount ?? maxSeats);
                       setStep('accept-count');
                     } else {
                       submitRsvp('confirmed', 1);
@@ -240,10 +238,7 @@ export default function RsvpPage() {
                   type="button"
                   className="btn-outline"
                   disabled={submitting}
-                  onClick={() => {
-                    startInviteMusic();
-                    submitRsvp('declined');
-                  }}
+                  onClick={() => submitRsvp('declined')}
                 >
                   Regretfully decline
                 </button>
@@ -259,7 +254,7 @@ export default function RsvpPage() {
                   How many will attend?
                 </h2>
                 <p className="text-center text-warm-gray-muted text-[0.65rem] uppercase tracking-[0.15em] mb-7">
-                  Up to {guest.invitedCount} guest{guest.invitedCount > 1 ? 's' : ''}
+                  Up to {maxSeats} guest{maxSeats > 1 ? 's' : ''}
                 </p>
                 <div className="flex items-center justify-center gap-6 mb-8">
                   <button
@@ -280,8 +275,8 @@ export default function RsvpPage() {
                     type="button"
                     aria-label="Increase count"
                     className="w-12 h-12 border border-[color:var(--color-gold)] text-[color:var(--color-gold-dark)] flex items-center justify-center hover:bg-[color:var(--color-gold)]/10 transition-colors disabled:opacity-30"
-                    disabled={attendingCount >= guest.invitedCount}
-                    onClick={() => setAttendingCount((c) => Math.min(guest.invitedCount, c + 1))}
+                    disabled={attendingCount >= maxSeats}
+                    onClick={() => setAttendingCount((c) => Math.min(maxSeats, c + 1))}
                   >
                     <Plus size={20} strokeWidth={1.5} />
                   </button>
@@ -291,10 +286,7 @@ export default function RsvpPage() {
                     type="button"
                     className="btn-pearl"
                     disabled={submitting}
-                    onClick={() => {
-                      startInviteMusic();
-                      submitRsvp('confirmed', attendingCount);
-                    }}
+                    onClick={() => submitRsvp('confirmed', attendingCount)}
                   >
                     {submitting ? 'Saving...' : 'Confirm attendance'}
                   </button>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabase } from '@/lib/supabase';
-import { extractTokenFromSlug, toPublicGuest } from '@/lib/guest';
+import { extractTokenFromSlug, seatsAllowed, toPublicGuest } from '@/lib/guest';
 
 type RouteParams = { params: Promise<{ token: string }> };
 
@@ -37,10 +37,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
   let confirmedCount: number | null = null;
   if (status === 'confirmed') {
-    const requested = body.confirmed_count ?? existing.count;
-    if (!Number.isInteger(requested) || requested < 1 || requested > existing.count) {
+    const maxSeats = seatsAllowed(existing.count);
+    const requested = body.confirmed_count ?? maxSeats;
+    if (!Number.isInteger(requested) || requested < 1 || requested > maxSeats) {
       return NextResponse.json(
-        { error: `Please choose between 1 and ${existing.count} guests` },
+        { error: `Please choose between 1 and ${maxSeats} guests` },
         { status: 400 }
       );
     }

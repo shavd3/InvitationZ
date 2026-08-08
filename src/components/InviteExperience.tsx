@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { RevealOverlay } from '@/components/RevealOverlay';
-import { InviteAudio, MusicToggle, type InviteMusicControls } from '@/components/InviteAudio';
 import { shouldShowReveal } from '@/lib/invite-reveal';
 
 type InviteExperienceProps = {
@@ -13,10 +12,6 @@ export function InviteExperience({ children }: InviteExperienceProps) {
   const [showReveal, setShowReveal] = useState(false);
   const [ready, setReady] = useState(false);
   const [checked, setChecked] = useState(false);
-
-  const handleMusicReady = useCallback((_controls: InviteMusicControls) => {
-    // Music starts on first user interaction only (browser autoplay policy).
-  }, []);
 
   useEffect(() => {
     const reveal = shouldShowReveal();
@@ -32,8 +27,6 @@ export function InviteExperience({ children }: InviteExperienceProps) {
 
   return (
     <>
-      <InviteAudio onReady={handleMusicReady} />
-      <MusicToggle />
       {!checked ? (
         <div className="min-h-screen bg-[color:var(--color-cream)]" />
       ) : (

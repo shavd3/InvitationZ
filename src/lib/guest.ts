@@ -40,11 +40,16 @@ type GuestRowPublic = Pick<
 >;
 
 export function displayName(firstName: string, lastName: string): string {
-  const format = (part: string) => {
-    const trimmed = part.trim();
-    if (!trimmed) return '';
-    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
-  };
+  // Capitalise each word and leave the rest of it alone. Lowercasing the tail would turn
+  // "Ajith & Family" into "Ajith & family" — the names in the planner are already cased the
+  // way the couple wants them, so the only job here is a leading capital.
+  const format = (part: string) =>
+    part
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   const first = format(firstName);
   const last = format(lastName);
   if (!first && !last) return 'Friend';
@@ -67,6 +72,15 @@ export function buildSlug(firstName: string, lastName: string, token: string): s
 export function extractTokenFromSlug(slug: string): string {
   const parts = slug.split('-');
   return parts[parts.length - 1] ?? slug;
+}
+
+/**
+ * Seats a guest may confirm. The planner keeps some rows at count 0 (relatives abroad who are
+ * listed but not being sent anything). If such a link is ever handed out, the holder is invited
+ * for at least themselves — never dead-end someone who opened a personal invitation.
+ */
+export function seatsAllowed(invitedCount: number): number {
+  return Math.max(1, invitedCount);
 }
 
 export function toPublicGuest(row: GuestRowPublic): GuestPublic {

@@ -1,12 +1,12 @@
 export const WEDDING = {
-  dateIso: '2026-10-10T15:00:00+05:30',
+  dateIso: '2026-10-10T15:15:00+05:30',
   dateDisplay: 'Saturday, 10th October 2026',
   dateWeekday: 'Saturday',
   dateMonth: 'October',
   dateDay: '10',
   dateYear: '2026',
-  timeDisplay: '3:00 PM',
-  timeDisplayShort: '3 PM Onwards',
+  timeDisplay: '3:15 PM',
+  timeDisplayShort: '3.15 PM Onwards',
   venue: "St. Sebastian's Church",
   venueAddress: 'Moratuwa, Sri Lanka',
   venueFull: "St. Sebastian's Church, Moratuwa",
@@ -16,14 +16,14 @@ export const WEDDING = {
   brideParents: 'Heshan & Sharmila Perera',
   groomParents: 'Eshan & Shyanika Fernando (Late)',
   contacts: [
-    { label: 'Heshan', phone: '+94 77 267 2644', tel: 'tel:+94772672644' },
-    { label: 'Eshan', phone: '+94 77 323 3602', tel: 'tel:+94773233602' },
+    { label: 'Shavin', phone: '+94 77 359 2037', tel: 'tel:+94773592037' },
+    { label: 'Amaya', phone: '+94 72 230 7420', tel: 'tel:+94722307420' },
   ],
 } as const;
 
 export function googleCalendarUrl(): string {
-  const start = '20261010T093000Z'; // 3:00 PM +05:30 = 09:30 UTC
-  const end = '20261010T120000Z';
+  const start = '20261010T094500Z'; // 3:15 PM +05:30 = 09:45 UTC
+  const end = '20261010T120000Z'; // 5:30 PM +05:30
   const params = new URLSearchParams({
     action: 'TEMPLATE',
     text: 'Amaya & Shavin — Wedding Ceremony',
