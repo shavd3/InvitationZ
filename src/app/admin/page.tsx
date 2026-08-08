@@ -108,15 +108,18 @@ export default function AdminPage() {
 
   if (authenticated === null) {
     return (
-      <main className="max-w-md mx-auto px-4 py-16">
+      <div className="theme-ivory admin-surface">
+        <main className="max-w-md mx-auto px-4 py-16">
         <div className="card text-center text-warm-gray-light">Loading...</div>
       </main>
+      </div>
     );
   }
 
   if (!authenticated) {
     return (
-      <main className="max-w-md mx-auto px-4 py-16">
+      <div className="theme-ivory admin-surface">
+        <main className="max-w-md mx-auto px-4 py-16">
         <div className="card">
           <h1 className="text-2xl font-bold text-gold text-center mb-6">Admin Login</h1>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -134,11 +137,13 @@ export default function AdminPage() {
           </form>
         </div>
       </main>
+      </div>
     );
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-4 py-8">
+    <div className="theme-ivory admin-surface">
+      <main className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h1 className="text-3xl font-bold text-gold">Invitation Links</h1>
@@ -251,5 +256,6 @@ export default function AdminPage() {
         </div>
       )}
     </main>
+    </div>
   );
 }

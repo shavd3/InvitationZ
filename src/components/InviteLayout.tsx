@@ -38,7 +38,7 @@ export function ParentsBlessing({ inviteeName }: { inviteeName?: string }) {
     <div className="text-center leading-relaxed">
       <ParentLine name={WEDDING.brideParents} />
       <p
-        className="italic tracking-[0.06em] text-sm sm:text-base text-[#6b4f28] font-medium my-4 text-shadow-soft"
+        className="italic tracking-[0.06em] text-sm sm:text-base text-[color:var(--color-gold-dark)] font-medium my-4 text-shadow-soft"
         style={{ fontFamily: 'var(--font-display)' }}
       >
         together with

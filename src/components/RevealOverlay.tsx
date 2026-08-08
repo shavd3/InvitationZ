@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { InvitationCard, OrnamentalDivider } from '@/components/Floral';
-import { FloralBackground } from '@/components/FloralBackground';
+import { InvitationCard, OrnamentalDivider, INVITE_THEME } from '@/components/Floral';
 import { CoupleNames } from '@/components/InviteLayout';
 
 const HOLD_MS = 3200;
@@ -33,17 +32,12 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
 
   return (
     <div
-      className={`fixed inset-0 z-50 overflow-hidden bg-[#fdf8f2] transition-opacity duration-[1200ms] ease-out ${
+      className={`fixed inset-0 z-50 invite-page ${INVITE_THEME} transition-opacity duration-[1200ms] ease-out ${
         closing ? 'opacity-0' : 'opacity-100'
       }`}
       role="presentation"
       aria-hidden="true"
     >
-      <FloralBackground
-        src="/backgrounds/main-bg.svg"
-        scrimClassName="absolute inset-0 bg-gradient-to-b from-[#fdf8f2]/35 via-[#f5ebe0]/18 to-[#ede4d6]/30"
-      />
-
       <div className="relative max-w-md mx-auto px-4 min-h-screen flex items-center justify-center">
         <InvitationCard>
           <div

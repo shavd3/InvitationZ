@@ -1,9 +1,13 @@
-import { FloralBackground } from '@/components/FloralBackground';
+import { FallingPetals } from '@/components/FallingPetals';
 
 export function InvitationCard({ children }: { children: React.ReactNode }) {
   return (
     <div className="invitation-card">
       <div className="invitation-card-bg" aria-hidden="true" />
+      <span className="card-corner card-corner-tl" aria-hidden="true" />
+      <span className="card-corner card-corner-tr" aria-hidden="true" />
+      <span className="card-corner card-corner-bl" aria-hidden="true" />
+      <span className="card-corner card-corner-br" aria-hidden="true" />
       <div className="invitation-card-content">{children}</div>
     </div>
   );
@@ -28,13 +32,13 @@ export function OrnamentalDivider({ compact = false }: { compact?: boolean }) {
 /** @deprecated Use OrnamentalDivider */
 export const HeartDivider = OrnamentalDivider;
 
+/** Swap to 'theme-midnight' for the ink-and-gold ground. */
+export const INVITE_THEME = 'theme-midnight';
+
 export function InvitationFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#fdf8f2]">
-      <FloralBackground
-        src="/backgrounds/main-bg.svg"
-        scrimClassName="absolute inset-0 bg-gradient-to-b from-[#fdf8f2]/35 via-[#f5ebe0]/18 to-[#ede4d6]/30"
-      />
+    <div className={`invite-page ${INVITE_THEME}`}>
+      <FallingPetals />
       <div className="relative max-w-md mx-auto px-4 py-10 sm:py-14 min-h-screen flex flex-col justify-center">
         <InvitationCard>
           <div className="stagger-in">{children}</div>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { RevealOverlay } from '@/components/RevealOverlay';
+import { INVITE_THEME } from '@/components/Floral';
 import { shouldShowReveal } from '@/lib/invite-reveal';
 
 type InviteExperienceProps = {
@@ -28,7 +29,8 @@ export function InviteExperience({ children }: InviteExperienceProps) {
   return (
     <>
       {!checked ? (
-        <div className="min-h-screen bg-[color:var(--color-cream)]" />
+        /* Must carry the theme, or a dark invitation flashes white before hydration */
+        <div className={`min-h-screen invite-page ${INVITE_THEME}`} />
       ) : (
         <>
           {showReveal && <RevealOverlay onComplete={handleRevealComplete} />}
