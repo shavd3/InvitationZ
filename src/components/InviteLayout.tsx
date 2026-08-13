@@ -33,10 +33,10 @@ function ParentLine({ name }: { name: string }) {
 
 export function CoupleNames() {
   /* Paint (gold + living foil), font, and entrance write-on all live on .couple-names.
-     Sized a step up from the Pinyon days — Great Vibes carries a smaller body at the
-     same font-size. */
+     Italianno is condensed and small-bodied, so it sits a step larger than the earlier
+     scripts did — these sizes keep the names on one line from ~390px up. */
   return (
-    <h1 className="couple-names text-center text-[3.4rem] sm:text-[4rem] leading-[1.15]">
+    <h1 className="couple-names text-center text-[3.7rem] sm:text-[4.1rem] leading-[1.15]">
       Amaya &amp; Shavin
     </h1>
   );

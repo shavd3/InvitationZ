@@ -22,9 +22,10 @@
   --font-sans: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  /* Great Vibes, not Pinyon Script: Pinyon's capital S carries a crossbar-like
-     swash that made "Shavin" read as "Thavin" (and its ampersand is a bare curl). */
-  --font-script: 'Great Vibes', 'Cormorant Garamond', cursive;
+  /* Italianno — the couple's pick from the script specimen. (Pinyon Script was
+     dropped because its capital S read as a T; Great Vibes was the interim fix.)
+     Italianno runs condensed and small-bodied, so CoupleNames sizes up to match. */
+  --font-script: 'Italianno', 'Cormorant Garamond', cursive;
 }
 
 .font-display {
