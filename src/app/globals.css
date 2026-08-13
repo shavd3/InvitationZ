@@ -22,7 +22,9 @@
   --font-sans: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-script: 'Pinyon Script', 'Cormorant Garamond', cursive;
+  /* Great Vibes, not Pinyon Script: Pinyon's capital S carries a crossbar-like
+     swash that made "Shavin" read as "Thavin" (and its ampersand is a bare curl). */
+  --font-script: 'Great Vibes', 'Cormorant Garamond', cursive;
 }
 
 .font-display {
@@ -230,9 +232,9 @@ h1, h2, h3, h4 {
 
 /* The names don't press in — they are written. Wipe delay matches the child-2
    ladder slot; the catch follows once the ink is down, and the living passes take
-   over from there. Generous negative insets keep Pinyon's swashes outside the clip.
-   Placed after the ladder so this rule's animation-delay wins the equal-specificity
-   tie with nth-child(2). */
+   over from there. Generous negative insets keep the script's swashes outside the
+   clip. Placed after the ladder so this rule's animation-delay wins the
+   equal-specificity tie with nth-child(2). */
 .invite-content-visible .stagger-in > .couple-names {
   opacity: 1;
   transform: none;

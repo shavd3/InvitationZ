@@ -32,9 +32,11 @@ function ParentLine({ name }: { name: string }) {
 }
 
 export function CoupleNames() {
-  /* Paint (gold + foil catch), font, and entrance write-on all live on .couple-names */
+  /* Paint (gold + living foil), font, and entrance write-on all live on .couple-names.
+     Sized a step up from the Pinyon days — Great Vibes carries a smaller body at the
+     same font-size. */
   return (
-    <h1 className="couple-names text-center text-5xl sm:text-6xl leading-[1.1]">
+    <h1 className="couple-names text-center text-[3.4rem] sm:text-[4rem] leading-[1.15]">
       Amaya &amp; Shavin
     </h1>
   );
