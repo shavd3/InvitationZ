@@ -65,7 +65,8 @@ export function DateTenEasterEgg() {
         type="button"
         onClick={handleTap}
         aria-label={`${WEDDING.dateDay}. Tap three times for a surprise.`}
-        className="font-display my-1 text-6xl sm:text-7xl leading-none tracking-tight text-foil bg-transparent border-0 p-0 cursor-pointer appearance-none"
+        className="my-1 text-6xl sm:text-7xl leading-none font-medium text-[color:var(--color-gold)] bg-transparent border-0 p-0 cursor-pointer appearance-none"
+        style={{ fontFamily: 'var(--font-sans)' }}
       >
         {WEDDING.dateDay}
       </button>

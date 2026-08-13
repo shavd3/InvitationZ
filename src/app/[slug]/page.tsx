@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Minus, Plus, CalendarPlus, Pencil } from 'lucide-react';
-import { InvitationFrame, OrnamentalDivider } from '@/components/Floral';
+import { InvitationFrame } from '@/components/Floral';
 import { InviteExperience } from '@/components/InviteExperience';
+import { PetalBurst } from '@/components/PetalBurst';
 import {
   CoupleNames,
   ParentsBlessing,
   EventDetails,
   ContactDetails,
+  RefreshmentsNote,
 } from '@/components/InviteLayout';
 import { WEDDING, googleCalendarUrl } from '@/lib/constants';
 import { seatsAllowed, type GuestPublic } from '@/lib/guest';
@@ -27,6 +29,8 @@ export default function RsvpPage() {
   const [editing, setEditing] = useState(false);
   const [attendingCount, setAttendingCount] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  // Bumped on every accepted RSVP; keying PetalBurst on it fires a fresh flurry
+  const [burstKey, setBurstKey] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -71,6 +75,7 @@ export default function RsvpPage() {
       setGuest(data);
       setEditing(false);
       setStep('view');
+      if (status === 'confirmed') setBurstKey((k) => k + 1);
     } catch {
       setError('Unable to save your response. Please try again.');
     } finally {
@@ -124,18 +129,17 @@ export default function RsvpPage() {
 
         <CoupleNames />
 
-        <OrnamentalDivider />
-
         <EventDetails showDirections={guest.rsvpStatus === 'confirmed'} />
 
-        <p className="text-center uppercase tracking-[0.2em] text-[0.6rem] sm:text-[0.65rem] text-warm-gray-muted font-normal leading-relaxed">
-          {WEDDING.refreshmentsNote}
-        </p>
+        <RefreshmentsNote />
 
         {!hasResponded && (
-          <p className="text-center text-[0.65rem] sm:text-xs text-warm-gray-muted tracking-wide">
+          <p
+            className="text-center text-sm text-warm-gray-light tracking-wide"
+            style={{ fontFamily: 'var(--font-sans)' }}
+          >
             Kindly respond by{' '}
-            <span className="text-[color:var(--color-gold-dark)] font-medium">
+            <span className="text-[color:var(--color-gold-dark)] font-semibold">
               {WEDDING.rsvpDeadline}
             </span>
           </p>
@@ -151,7 +155,7 @@ export default function RsvpPage() {
           <div className="panel text-center">
             {guest.rsvpStatus === 'confirmed' ? (
               <>
-                <p className="font-display text-2xl text-foil mb-3">
+                <p className="font-display text-2xl sm:text-3xl text-[color:var(--color-gold-dark)] mb-3">
                   With gratitude
                 </p>
                 <p className="text-sm text-warm-gray-light font-light leading-relaxed mb-1">
@@ -164,10 +168,7 @@ export default function RsvpPage() {
               </>
             ) : (
               <>
-                <p
-                  className="text-2xl text-[color:var(--color-gold-dark)] mb-3"
-                  style={{ fontFamily: 'var(--font-sans)' }}
-                >
+                <p className="font-display text-2xl sm:text-3xl text-[color:var(--color-gold-dark)] mb-3">
                   Thank you
                 </p>
                 <p className="text-sm text-warm-gray-light font-light leading-relaxed">
@@ -221,7 +222,7 @@ export default function RsvpPage() {
               <div className="space-y-4">
                 <button
                   type="button"
-                  className="btn-pearl"
+                  className="btn-primary"
                   disabled={submitting}
                   onClick={() => {
                     if (maxSeats > 1) {
@@ -284,7 +285,7 @@ export default function RsvpPage() {
                 <div className="space-y-4">
                   <button
                     type="button"
-                    className="btn-pearl"
+                    className="btn-primary"
                     disabled={submitting}
                     onClick={() => submitRsvp('confirmed', attendingCount)}
                   >
@@ -304,12 +305,9 @@ export default function RsvpPage() {
           </div>
         )}
 
-        {hasResponded && (
-          <>
-            <OrnamentalDivider />
-            <ContactDetails />
-          </>
-        )}
+        {hasResponded && <ContactDetails />}
+
+        {burstKey > 0 && <PetalBurst key={burstKey} />}
       </InvitationFrame>
     </InviteExperience>
   );

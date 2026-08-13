@@ -1,4 +1,4 @@
-import { InvitationFrame, OrnamentalDivider } from '@/components/Floral';
+import { InvitationFrame } from '@/components/Floral';
 import { CoupleNames, ParentsBlessing, EventDetails } from '@/components/InviteLayout';
 
 export default function HomePage() {
@@ -7,8 +7,6 @@ export default function HomePage() {
       <ParentsBlessing />
 
       <CoupleNames />
-
-      <OrnamentalDivider />
 
       <EventDetails />
 

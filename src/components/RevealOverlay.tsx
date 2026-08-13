@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { InvitationCard, OrnamentalDivider, INVITE_THEME } from '@/components/Floral';
+import { InvitationCard, INVITE_THEME } from '@/components/Floral';
 import { CoupleNames } from '@/components/InviteLayout';
 
 const HOLD_MS = 3200;
@@ -46,11 +46,11 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
             }`}
           >
             <p
-              className={`uppercase tracking-[0.3em] text-xs sm:text-sm text-warm-gray-light font-medium text-shadow-soft mb-6 transition-all duration-[800ms] ease-out ${
+              className={`uppercase tracking-[0.3em] text-xs sm:text-sm text-warm-gray-light font-medium mb-6 transition-all duration-[800ms] ease-out ${
                 contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
               }`}
               style={{
-                fontFamily: 'var(--font-body)',
+                fontFamily: 'var(--font-sans)',
                 transitionDelay: contentVisible ? '200ms' : '0ms',
               }}
             >
@@ -66,15 +66,6 @@ export function RevealOverlay({ onComplete }: RevealOverlayProps) {
               style={{ transitionDelay: contentVisible ? '450ms' : '0ms' }}
             >
               <CoupleNames />
-            </div>
-
-            <div
-              className={`transition-all duration-[800ms] ease-out ${
-                contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-              }`}
-              style={{ transitionDelay: contentVisible ? '700ms' : '0ms' }}
-            >
-              <OrnamentalDivider />
             </div>
           </div>
         </InvitationCard>

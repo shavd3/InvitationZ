@@ -1,32 +1,97 @@
 @import "tailwindcss";
 
 @theme {
-  /* Gold reads as metal only when it spans real dark-to-light, and only against a clean
-     ground. Flat mid-tans on tan artwork is what makes stationery look like old parchment. */
-  --color-gold: #c0a05c;
-  --color-gold-light: #e0c88f;
-  --color-gold-dark: #8a6d34;
-  --color-gold-bright: #f4e5b6;
-  --color-gold-muted: #a89263;
+  /* Engraved: one ink, one gold. The accent sits clearly darker than any hairline so it
+     reads as engraving rather than tint — every gold in the file is this hue at another
+     stop, and the shimmer/foil treatments are gone with the rest of the ornament. */
+  --color-gold: #8a6a2f;
+  --color-gold-light: #c2ad7e;
+  --color-gold-dark: #745726;
+  --color-gold-bright: #d9c79a;
+  --color-gold-muted: #9c8b62;
   --color-blush: #fbf8f3;
-  --color-blush-dark: #e9dfcd;
+  --color-blush-dark: #e7dfcf;
   --color-cream: #fefcf8;
-  --color-ivory: #ffffff;
-  --color-ivory-dark: #f6eee1;
+  --color-ivory: #fdfcf8;
+  --color-ivory-dark: #f2ecdf;
   --color-sage: #8fa878;
   --color-sage-light: #b5c9a8;
-  --color-warm-gray: #2f2922;
-  --color-warm-gray-light: #6b6155;
-  --color-warm-gray-muted: #8b8071;
+  --color-warm-gray: #1e1b16;
+  --color-warm-gray-light: #5f584b;
+  --color-warm-gray-muted: #7a7160;
   --font-sans: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-script: 'Pinyon Script', 'Cormorant Garamond', cursive;
 }
 
 .font-display {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 600;
+}
+
+/* The two shine layers ride on registered custom properties so several animations
+   (the entrance's one-shot catch, then the endless passes) can drive the same
+   background-position without fighting over it. Browsers without @property simply
+   never show the shimmer — the names stay flat gold. */
+@property --shine-a {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: -150%;
+}
+
+@property --shine-b {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 260%;
+}
+
+/* The couple's names. Handwritten (unlayered) for the same reason .font-display is:
+   the unlayered `h1 { font-family }` rule below would beat a Tailwind @layer'd utility.
+   The glyphs are painted as three clipped background layers — two travelling shines
+   over flat gold — so the light lives on the letterforms and never smears the paper.
+
+   Living foil: after one early catch, two passes on mismatched clocks (11s / 17s)
+   cross the gold at unequal intervals and directions. The pattern only repeats every
+   ~3 minutes, so the shimmer never reads as a loop. Both rest positions sit off the
+   glyphs, making every reset invisible. */
+.couple-names {
+  font-family: var(--font-script);
+  font-weight: 400;
+  color: transparent;
+  background:
+    linear-gradient(105deg, rgba(255, 246, 220, 0) 42%, rgba(255, 246, 220, 0.9) 50%, rgba(255, 246, 220, 0) 58%) no-repeat,
+    linear-gradient(255deg, rgba(255, 240, 200, 0) 44%, rgba(255, 240, 200, 0.45) 50%, rgba(255, 240, 200, 0) 56%) no-repeat,
+    var(--color-gold);
+  background-size: 280% 100%, 300% 100%, auto;
+  background-position: var(--shine-a) 0, var(--shine-b) 0, 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation:
+    catch-a 1.1s ease-in-out 0.6s,
+    pass-a 11s ease-in-out 3s infinite,
+    pass-b 17s ease-in-out 3s infinite;
+}
+
+/* One deliberate early catch for surfaces without the entrance (home, the overlay);
+   the entrance override re-times it to follow the write-on. No fill on purpose —
+   it snaps back to the off-canvas rest, and the infinite passes take over. */
+@keyframes catch-a {
+  from { --shine-a: -150%; }
+  to { --shine-a: 160%; }
+}
+
+@keyframes pass-a {
+  0%, 58% { --shine-a: -150%; }
+  79% { --shine-a: 160%; }
+  79.01%, 100% { --shine-a: -150%; }
+}
+
+@keyframes pass-b {
+  0%, 22% { --shine-b: 260%; }
+  52% { --shine-b: -270%; }
+  52.01%, 100% { --shine-b: 260%; }
 }
 
 /* Both html and body carry the ground: html covers the overscroll area, body covers any
@@ -47,129 +112,10 @@ h1, h2, h3, h4 {
   font-weight: 700;
 }
 
-/* Soft halo so text stays legible when it sits over the watercolor artwork */
-.text-shadow-soft {
-  text-shadow:
-    0 1px 10px rgba(255, 255, 255, 0.9),
-    0 0px 3px rgba(255, 255, 255, 0.75);
-}
-
-/* Gold foil shimmer on names — kept mid-to-dark throughout so it never washes
-   out against the light card background */
-.text-foil {
-  /* A real foil ramp: deep bronze shadow through to a near-white champagne highlight.
-     The old version topped out at a mid tan, which reads as brown ink, not metal. */
-  background: linear-gradient(
-    120deg,
-    #7a5a24 0%,
-    #9c7a33 16%,
-    #c2a054 32%,
-    #efdca6 48%,
-    #fbf3d8 52%,
-    #efdca6 58%,
-    #c2a054 72%,
-    #9c7a33 86%,
-    #7a5a24 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: foil-shimmer 7s ease-in-out infinite;
-  text-shadow: 0 1px 2px rgba(92, 67, 34, 0.22);
-}
-
-@keyframes foil-shimmer {
-  0%, 100% { background-position: 0% center; }
-  50% { background-position: 100% center; }
-}
-
-/* Petals drifting down across the page */
-.petals {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* Outer element: the fall */
-.petal-fall {
-  position: absolute;
-  top: -10vh;
-  animation-name: petal-fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes petal-fall {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  86% {
-    opacity: 1;
-  }
-  100% {
-    transform: translate3d(var(--drift), 118vh, 0);
-    opacity: 0;
-  }
-}
-
-.petal-defs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-/* Inner element: sway, tumble and flip, on a period that doesn't divide into the fall */
-.petal {
-  display: block;
-  overflow: visible;
-  filter: drop-shadow(0 1px 2px rgba(60, 44, 18, 0.18));
-  animation-name: petal-sway;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-  will-change: transform;
-}
-
-/* scaleX turns the petal edge-on at one end of the swing, the way a real one flutters */
-@keyframes petal-sway {
-  from {
-    transform: translateX(calc(var(--sway) * -1)) rotate(var(--rot-from)) scaleX(1);
-  }
-  to {
-    transform: translateX(var(--sway)) rotate(var(--rot-to)) scaleX(var(--flip));
-  }
-}
-
-/* The watercolour breathes — slow enough to feel alive without reading as movement */
-.floral-breathe {
-  transform-origin: center;
-  animation: floral-breathe 38s ease-in-out infinite alternate;
-  will-change: transform;
-}
-
-@keyframes floral-breathe {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.045);
-  }
-}
-
 /* ── Invitation ground ───────────────────────────────────────────────────────
-   The watercolour artwork is no longer painted behind the content: a busy tan
-   texture leaves gold nothing clean to sit against. The ground is now CSS, and
-   the theme class re-declares the palette tokens, so every existing utility
-   (text-warm-gray, border-blush-dark, …) re-points without touching components. */
+   Engraved stationery: an ivory sheet on a quiet stone ground. Everything that
+   used to decorate this page — petals, flourishes, watercolour, foil shimmer,
+   glow pools — is gone; whitespace and type contrast do the work now. */
 
 .invite-page {
   position: relative;
@@ -178,147 +124,30 @@ h1, h2, h3, h4 {
   background: var(--ground);
 }
 
-/* Soft pool of light behind the card, so the ground has depth rather than being flat fill */
-.invite-page::before {
+/* Paper tooth. A flat gradient reads as a screen; real stationery has grain, and a few
+   percent of monochrome noise is the difference. Generated inline — no network request. */
+.invite-page::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--ground-glow);
   pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23g)'/></svg>");
+  background-size: 180px 180px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  z-index: 2;
 }
 
 .theme-ivory {
-  --ground: linear-gradient(168deg, #fffdfa 0%, #fdf7ec 46%, #f7edd9 100%);
-  --ground-glow: radial-gradient(
-    110% 62% at 50% 30%,
-    rgba(255, 255, 255, 0.85) 0%,
-    rgba(255, 255, 255, 0) 62%
-  );
-  --card-surface: linear-gradient(165deg, #fffefb 0%, #fffcf5 55%, #fdf7ea 100%);
-  --card-edge: rgba(170, 134, 66, 0.5);
-  --card-edge-soft: rgba(170, 134, 66, 0.26);
-  --card-shadow: 0 1px 2px rgba(122, 90, 36, 0.07), 0 12px 34px rgba(122, 90, 36, 0.1),
-    0 30px 70px rgba(122, 90, 36, 0.06);
-
-  /* A theme must restate every token the other theme changes. Otherwise nesting this inside
-     midnight (as /admin does) inherits the dark values and produces dark-on-dark text. */
-  --color-warm-gray: #2f2922;
-  --color-warm-gray-light: #6b6155;
-  --color-warm-gray-muted: #8b8071;
-  --color-gold: #c0a05c;
-  --color-gold-light: #e0c88f;
-  --color-gold-dark: #8a6d34;
-  --color-blush-dark: #e9dfcd;
-  --color-cream: #fefcf8;
-
-  --petal-ivory-a: #fffdf8;
-  --petal-ivory-b: #f3e8d4;
-  --petal-ivory-c: #dbcaa8;
-  --petal-gold-a: #fff4d4;
-  --petal-gold-b: #e6cb92;
-  --petal-gold-c: #b89a5e;
-}
-
-.theme-midnight {
-  --ground: linear-gradient(168deg, #262a34 0%, #191c24 52%, #0d0f14 100%);
-  --ground-glow: radial-gradient(
-    105% 58% at 50% 26%,
-    rgba(226, 197, 130, 0.13) 0%,
-    rgba(226, 197, 130, 0) 60%
-  );
-  --card-surface: linear-gradient(165deg, rgba(255, 250, 236, 0.07) 0%, rgba(255, 250, 236, 0.03) 55%, rgba(255, 250, 236, 0.015) 100%);
-  --card-edge: rgba(228, 200, 134, 0.55);
-  --card-edge-soft: rgba(228, 200, 134, 0.26);
-  --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 46px rgba(0, 0, 0, 0.45),
-    0 0 90px rgba(226, 197, 130, 0.07);
-
-  /* Re-point the palette so existing utilities flip with the theme */
-  --color-warm-gray: #f4ecd9;
-  --color-warm-gray-light: #d3c7ac;
-  --color-warm-gray-muted: #ab9f86;
-  --color-gold: #d9be80;
-  --color-gold-light: #ecd9a8;
-  --color-gold-dark: #e8d29a;
-  --color-blush-dark: rgba(228, 200, 134, 0.28);
-  --color-cream: #12141a;
-
-  --petal-ivory-a: #fff8e6;
-  --petal-ivory-b: #e9d5aa;
-  --petal-gold-c: #a98c53;
-  --petal-ivory-c: #c0a878;
-  --petal-gold-a: #fff2ce;
-  --petal-gold-b: #ddbf82;
-}
-
-/* The white halo exists to lift text off pale artwork; on ink it would glow */
-.theme-midnight .text-shadow-soft {
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* background-image, not the `background` shorthand — the shorthand resets background-clip
-   and would undo the clip:text from the base rule, painting a solid gold block. */
-.theme-midnight .text-foil {
-  background-image: linear-gradient(
-    120deg,
-    #b08f45 0%,
-    #d8bb76 18%,
-    #f3e3b4 36%,
-    #fffaea 50%,
-    #f3e3b4 64%,
-    #d8bb76 82%,
-    #b08f45 100%
-  );
-  background-size: 220% auto;
-  text-shadow: 0 1px 18px rgba(226, 197, 130, 0.22);
-}
-
-/* On ink the petals catch light rather than cast shadow */
-.theme-midnight .petal {
-  filter: drop-shadow(0 0 4px rgba(226, 197, 130, 0.28));
-}
-
-/* The RSVP surfaces are built for pale stationery; on ink they need their own treatment.
-   .btn-pearl is left alone deliberately — a warm cream CTA on a dark ground is exactly the
-   contrast the primary action wants. */
-.theme-midnight .panel {
-  background: rgba(255, 250, 236, 0.045);
-  border-color: rgba(228, 200, 134, 0.28);
-}
-
-.theme-midnight .btn-outline {
-  background: rgba(255, 250, 236, 0.03);
-  color: #ddd0b4;
-  border-color: rgba(228, 200, 134, 0.42);
-}
-
-.theme-midnight .btn-outline:hover:not(:disabled) {
-  background: rgba(255, 250, 236, 0.08);
-  border-color: rgba(228, 200, 134, 0.7);
-  color: #f4ecd9;
-}
-
-.theme-midnight .btn-secondary {
-  color: #c4b795;
-  border-color: rgba(228, 200, 134, 0.32);
-}
-
-.theme-midnight .btn-secondary:hover {
-  background: rgba(255, 250, 236, 0.06);
-  border-color: rgba(228, 200, 134, 0.6);
-  color: #f4ecd9;
-}
-
-.theme-midnight .status-confirmed {
-  background: rgba(228, 200, 134, 0.14);
-  color: #ecd9a8;
-  border-color: rgba(228, 200, 134, 0.45);
-}
-
-.theme-midnight .status-declined,
-.theme-midnight .status-pending {
-  background: rgba(255, 250, 236, 0.05);
-  color: #b8ac92;
-  border-color: rgba(228, 200, 134, 0.24);
+  /* Warm stone, several shades below the card and dead flat. When the ground was doing
+     tricks (corner washes, a halo behind the card) the sheet had to shout over it; against
+     quiet stone the ivory reads as paper on a table. (theme-midnight is gone — it existed
+     for the old gilt identity and is recoverable from git history.) */
+  --ground: linear-gradient(174deg, #f1ebde 0%, #ece4d2 55%, #e6ddc8 100%);
+  --grain-opacity: 0.05;
+  --grain-blend: multiply;
+  --card-surface: #fdfcf8;
+  --card-shadow: 0 1px 2px rgba(60, 45, 20, 0.08), 0 18px 44px rgba(60, 45, 20, 0.13);
 }
 
 /* /admin is a working tool, not stationery — keep it on the light palette regardless of
@@ -328,73 +157,25 @@ h1, h2, h3, h4 {
   background: var(--ground);
 }
 
-/* Fine corner marks — a little jewellery at the frame's corners */
-.card-corner {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  transform: rotate(45deg);
-  border: 1px solid var(--card-edge);
-  background: transparent;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.card-corner-tl { top: 13px; left: 13px; }
-.card-corner-tr { top: 13px; right: 13px; }
-.card-corner-bl { bottom: 13px; left: 13px; }
-.card-corner-br { bottom: 13px; right: 13px; }
-
-/* Stationery card frame */
+/* The stationery sheet. No border, no frame, no artwork — an engraved card is an ivory
+   surface, its shadow, and type. Ornament here has been added and removed twice; the
+   answer both times was less. */
 .invitation-card {
   position: relative;
-  overflow: hidden;
   background: var(--card-surface);
-  border: 1px solid var(--card-edge);
   box-shadow: var(--card-shadow);
-  padding: 3rem 1.75rem;
+  padding: 3.25rem 1.9rem;
 }
 
 @media (min-width: 640px) {
   .invitation-card {
-    padding: 3rem 2.25rem;
+    padding: 3.6rem 2.6rem;
   }
 }
 
-/* Whisper of the watercolour, kept only as a faint tint at the card's edges so the
-   surface isn't dead flat. Nowhere near the text. */
-.invitation-card-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: url('/backgrounds/invitation-card-bg.svg') center / cover no-repeat;
-  filter: saturate(0.5) brightness(1.12);
-  opacity: 0.16;
-  mask-image: radial-gradient(85% 70% at 50% 50%, transparent 30%, black 100%);
-  -webkit-mask-image: radial-gradient(85% 70% at 50% 50%, transparent 30%, black 100%);
-}
-
-.theme-midnight .invitation-card-bg {
-  filter: saturate(0.35) brightness(0.5) contrast(1.1);
-  opacity: 0.22;
-  mix-blend-mode: screen;
-}
-
-.invitation-card-content {
-  position: relative;
-  z-index: 1;
-}
-
-.invitation-card::before {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border: 1px solid rgba(192, 160, 92, 0.42);
-  pointer-events: none;
-  z-index: 1;
-}
-
-
+/* Two gold rectangles, the outer square to the card and the inner one laid a hair off-square
+   so they drift apart towards the corners. border-image (not a masked gradient) because it
+   has fallen back to a transparent border on every engine since 2015 — a browser that can't
 /* Staggered content reveal — only after opening animation on RSVP pages */
 .stagger-in {
   display: flex;
@@ -413,30 +194,107 @@ h1, h2, h3, h4 {
   transform: none;
 }
 
-.invite-content-visible .stagger-in > * {
+/* ── The entrance — the card engraves itself ─────────────────────────────────
+   Plays once the reveal doors part (.invite-content-visible). Each block presses
+   into the paper like type; the date hairlines draw themselves; the names are
+   written on left to right, then the foil catches the light once. Blocks sit on
+   a 0.2s ladder; the names and hairline rules hardcode their slots (children 2
+   and 3 on both pages) — if the page order changes, retime those two below. */
+.invite-content-visible .stagger-in > :not(.petal-burst-layer) {
   opacity: 0;
   transform: translateY(10px);
-  animation: luxury-fade-up 0.9s ease forwards;
+  filter: blur(4px);
+  animation: press-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.invite-content-visible .stagger-in > *:nth-child(1) { animation-delay: 0.05s; }
-.invite-content-visible .stagger-in > *:nth-child(2) { animation-delay: 0.15s; }
-.invite-content-visible .stagger-in > *:nth-child(3) { animation-delay: 0.25s; }
-.invite-content-visible .stagger-in > *:nth-child(4) { animation-delay: 0.35s; }
-.invite-content-visible .stagger-in > *:nth-child(5) { animation-delay: 0.45s; }
-.invite-content-visible .stagger-in > *:nth-child(6) { animation-delay: 0.55s; }
-.invite-content-visible .stagger-in > *:nth-child(7) { animation-delay: 0.65s; }
-.invite-content-visible .stagger-in > *:nth-child(8) { animation-delay: 0.75s; }
-.invite-content-visible .stagger-in > *:nth-child(9) { animation-delay: 0.85s; }
-.invite-content-visible .stagger-in > *:nth-child(10) { animation-delay: 0.95s; }
-.invite-content-visible .stagger-in > *:nth-child(11) { animation-delay: 1.05s; }
-.invite-content-visible .stagger-in > *:nth-child(12) { animation-delay: 1.15s; }
+.invite-content-visible .stagger-in > *:nth-child(1) { animation-delay: 0.25s; }
+.invite-content-visible .stagger-in > *:nth-child(2) { animation-delay: 0.45s; }
+.invite-content-visible .stagger-in > *:nth-child(3) { animation-delay: 0.65s; }
+.invite-content-visible .stagger-in > *:nth-child(4) { animation-delay: 0.85s; }
+.invite-content-visible .stagger-in > *:nth-child(5) { animation-delay: 1.05s; }
+.invite-content-visible .stagger-in > *:nth-child(6) { animation-delay: 1.25s; }
+.invite-content-visible .stagger-in > *:nth-child(7) { animation-delay: 1.45s; }
+.invite-content-visible .stagger-in > *:nth-child(8) { animation-delay: 1.65s; }
+.invite-content-visible .stagger-in > *:nth-child(9) { animation-delay: 1.85s; }
+.invite-content-visible .stagger-in > *:nth-child(10) { animation-delay: 2.05s; }
+.invite-content-visible .stagger-in > *:nth-child(11) { animation-delay: 2.25s; }
+.invite-content-visible .stagger-in > *:nth-child(12) { animation-delay: 2.45s; }
 
-@keyframes luxury-fade-up {
+@keyframes press-in {
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
+}
+
+/* The names don't press in — they are written. Wipe delay matches the child-2
+   ladder slot; the catch follows once the ink is down, and the living passes take
+   over from there. Generous negative insets keep Pinyon's swashes outside the clip.
+   Placed after the ladder so this rule's animation-delay wins the equal-specificity
+   tie with nth-child(2). */
+.invite-content-visible .stagger-in > .couple-names {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  clip-path: inset(-40% 102% -45% -2%);
+  animation:
+    write 1.5s cubic-bezier(0.5, 0, 0.3, 1) 0.45s both,
+    catch-a 1.1s ease-in-out 2.15s,
+    pass-a 11s ease-in-out 4.5s infinite,
+    pass-b 17s ease-in-out 4.5s infinite;
+}
+
+@keyframes write {
+  to { clip-path: inset(-40% -4% -45% -2%); }
+}
+
+/* Date hairlines (inside child 3, whose slot is 0.65s) draw from their centres
+   while their block is still settling in */
+.invite-content-visible .date-rule-h {
+  transform: scaleX(0);
+  animation: rule-draw-h 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
+}
+
+.invite-content-visible .date-rule-v {
+  transform: scaleY(0);
+  animation: rule-draw-v 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
+}
+
+@keyframes rule-draw-h { to { transform: scaleX(1); } }
+@keyframes rule-draw-v { to { transform: scaleY(1); } }
+
+/* One-shot petal flurry over the card when a guest accepts — see PetalBurst.tsx.
+   The layer is a stagger child on the RSVP page, excluded from press-in above. */
+.petal-burst-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.petal-burst-layer .petal {
+  position: absolute;
+  top: -24px;
+  will-change: transform, opacity;
+}
+
+/* Continuous sparse petal fall on the ground, always BEHIND the sheet — the layer
+   sits first in .invite-page at z-0 and the content wrapper paints over it.
+   See AmbientPetals.tsx; the stationery itself stays still. */
+.ambient-petals {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-petals .petal {
+  position: absolute;
+  top: -30px;
+  will-change: transform, opacity;
 }
 
 .btn-gold {
@@ -487,95 +345,64 @@ h1, h2, h3, h4 {
   cursor: not-allowed;
 }
 
-/* RSVP primary — bright cream stationery with pearl light sweep */
-.btn-pearl {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(180deg, #fffdf9 0%, #faf3e8 55%, #f5ebdc 100%);
-  color: #6b5234;
+/* RSVP primary — engraved: solid gold plate, ivory letter. The serif caps at 600 are what
+   tie the buttons to the stationery; Inter here would put a web widget on a printed card. */
+.btn-primary {
+  background: var(--color-gold);
+  color: var(--color-ivory);
+  border: 1px solid var(--color-gold);
   padding: 0.9375rem 1.5rem;
-  border-radius: 3px;
-  font-weight: 500;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   transition:
-    background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    letter-spacing 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background 0.45s ease,
+    letter-spacing 0.45s ease,
+    box-shadow 0.45s ease;
   cursor: pointer;
-  border: 1px solid #c9a875;
   width: 100%;
   text-align: center;
   display: block;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    0 2px 12px rgba(184, 149, 106, 0.1);
+  box-shadow: 0 2px 12px rgba(110, 80, 30, 0.16);
 }
 
-.btn-pearl::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -45%;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.15) 30%,
-    rgba(255, 255, 255, 0.75) 48%,
-    rgba(236, 214, 170, 0.45) 58%,
-    transparent 100%
-  );
-  animation: pearl-sweep 4.2s ease-in-out infinite;
-  pointer-events: none;
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-gold-dark);
+  border-color: var(--color-gold-dark);
+  letter-spacing: 0.23em;
+  box-shadow: 0 5px 18px rgba(110, 80, 30, 0.22);
 }
 
-@keyframes pearl-sweep {
-  0%, 12% { left: -45%; }
-  52%, 100% { left: 120%; }
-}
-
-.btn-pearl:hover:not(:disabled) {
-  background: linear-gradient(180deg, #ffffff 0%, #fbf6ee 55%, #f7efdf 100%);
-  border-color: #d4b484;
-  color: #5c4322;
-  letter-spacing: 0.21em;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    0 5px 20px rgba(184, 149, 106, 0.16);
-}
-
-.btn-pearl:active:not(:disabled) {
-  background: linear-gradient(180deg, #f7efdf 0%, #f0e6d4 100%);
+.btn-primary:active:not(:disabled) {
+  box-shadow: 0 1px 6px rgba(110, 80, 30, 0.2);
   transition-duration: 0.15s;
 }
 
-.btn-pearl:disabled {
+.btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* RSVP secondary — soft outline, clearly tappable but still below Accept */
+/* RSVP secondary — a ghost in the card's own hairline weight, clearly below Accept */
 .btn-outline {
-  background: rgba(255, 255, 255, 0.4);
-  color: #7d6f5f;
-  border: 1px solid rgba(184, 149, 106, 0.55);
+  background: transparent;
+  color: var(--color-warm-gray-light);
+  border: 1px solid rgba(30, 27, 22, 0.22);
   padding: 0.9375rem 1.5rem;
-  border-radius: 3px;
-  font-weight: 500;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
+  border-radius: 2px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   transition:
-    background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    letter-spacing 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background 0.45s ease,
+    border-color 0.45s ease,
+    color 0.45s ease,
+    letter-spacing 0.45s ease;
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -583,15 +410,14 @@ h1, h2, h3, h4 {
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(184, 149, 106, 0.75);
-  color: #6b5234;
-  letter-spacing: 0.2em;
-  box-shadow: 0 3px 14px rgba(184, 149, 106, 0.1);
+  background: rgba(138, 106, 47, 0.05);
+  border-color: var(--color-gold);
+  color: var(--color-gold-dark);
+  letter-spacing: 0.23em;
 }
 
 .btn-outline:active:not(:disabled) {
-  background: rgba(184, 149, 106, 0.08);
+  background: rgba(138, 106, 47, 0.09);
   transition-duration: 0.15s;
 }
 
@@ -603,33 +429,41 @@ h1, h2, h3, h4 {
 .btn-secondary {
   background: transparent;
   color: var(--color-warm-gray-light);
-  border: 1px solid var(--color-blush-dark);
+  border: 1px solid rgba(30, 27, 22, 0.16);
   padding: 0.625rem 1.25rem;
   border-radius: 2px;
-  font-weight: 500;
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition:
-    background 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    letter-spacing 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    color 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background 0.45s ease,
+    border-color 0.45s ease,
+    color 0.45s ease,
+    letter-spacing 0.45s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
-  border-color: var(--color-gold-light);
+  border-color: var(--color-gold);
   color: var(--color-gold-dark);
-  background: rgba(253, 248, 242, 0.55);
-  letter-spacing: 0.13em;
-  box-shadow: 0 3px 14px rgba(184, 149, 106, 0.1);
+  background: rgba(138, 106, 47, 0.05);
+  letter-spacing: 0.15em;
 }
 
 .btn-secondary:active {
-  background: rgba(184, 149, 106, 0.08);
+  background: rgba(138, 106, 47, 0.09);
   transition-duration: 0.15s;
+}
+
+/* One visible focus treatment for every stationery control */
+.btn-primary:focus-visible,
+.btn-outline:focus-visible,
+.btn-secondary:focus-visible,
+.btn-gold:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
 }
 
 .card {
@@ -641,10 +475,10 @@ h1, h2, h3, h4 {
 }
 
 .panel {
-  background: rgba(253, 248, 242, 0.45);
+  background: transparent;
   border-radius: 2px;
   padding: 1.5rem 1.5rem;
-  border: 1px solid rgba(184, 149, 106, 0.32);
+  border: 1px solid rgba(30, 27, 22, 0.14);
 }
 
 input[type="text"],
@@ -679,21 +513,21 @@ input:focus {
 }
 
 .status-confirmed {
-  background: #f5ebe0;
-  color: #8b6f47;
-  border: 1px solid rgba(204, 177, 129, 0.65);
+  background: rgba(138, 106, 47, 0.07);
+  color: var(--color-gold-dark);
+  border: 1px solid rgba(138, 106, 47, 0.4);
 }
 
 .status-declined {
-  background: #faf7f2;
-  color: #7d6f5f;
-  border: 1px solid #e8dfd0;
+  background: transparent;
+  color: #6f6757;
+  border: 1px solid rgba(30, 27, 22, 0.16);
 }
 
 .status-pending {
-  background: #faf7f2;
-  color: #9a8b7a;
-  border: 1px solid #e8dfd0;
+  background: transparent;
+  color: #837a68;
+  border: 1px solid rgba(30, 27, 22, 0.16);
 }
 
 .invite-content-hidden {
@@ -719,12 +553,12 @@ input:focus {
 
 .reveal-panel-left {
   left: 0;
-  border-right: 1px solid rgba(192, 160, 92, 0.5);
+  border-right: 1px solid rgba(138, 106, 47, 0.45);
 }
 
 .reveal-panel-right {
   right: 0;
-  border-left: 1px solid rgba(192, 160, 92, 0.5);
+  border-left: 1px solid rgba(138, 106, 47, 0.45);
 }
 
 .reveal-panel-open.reveal-panel-left {
@@ -743,7 +577,7 @@ input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(253, 248, 242, 0.55);
+  background: rgba(253, 252, 248, 0.6);
   backdrop-filter: blur(4px);
   pointer-events: none;
   opacity: 1;
@@ -771,23 +605,9 @@ input:focus {
   letter-spacing: 0.04em;
 }
 
+/* Flat engraved gold — the foil-gradient treatment left with the rest of the shimmer */
 .date-ten-row .date-ten-part {
-  background: linear-gradient(
-    120deg,
-    #7a5a24 0%,
-    #9c7a33 16%,
-    #c2a054 32%,
-    #efdca6 48%,
-    #fbf3d8 52%,
-    #efdca6 58%,
-    #c2a054 72%,
-    #9c7a33 86%,
-    #7a5a24 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-gold-dark);
 }
 
 .date-ten-part {
@@ -910,19 +730,30 @@ input:focus {
     transition: none;
   }
 
-  .invite-content-visible .stagger-in > * {
+  /* Reduced-motion users get .invite-content-visible immediately (no reveal), so
+     every entrance rule must be neutralised here, at matching specificity. */
+  .invite-content-visible .stagger-in > :not(.petal-burst-layer),
+  .invite-content-visible .stagger-in > .couple-names {
     animation: none;
     opacity: 1;
     transform: none;
+    filter: none;
+    clip-path: none;
   }
 
-  .text-foil {
+  .couple-names {
     animation: none;
-    background-position: 50% center;
   }
 
-  .btn-pearl::after {
+  .invite-content-visible .date-rule-h,
+  .invite-content-visible .date-rule-v {
     animation: none;
+    transform: none;
+  }
+
+  /* Ambient weather is decorative — gone entirely, not merely stilled.
+     (AmbientPetals also checks the media query itself and spawns nothing.) */
+  .ambient-petals {
     display: none;
   }
 
@@ -936,15 +767,5 @@ input:focus {
   .date-ten-year-wrap,
   .date-ten-overlay {
     transition: none !important;
-  }
-
-  /* Ambient motion is decorative — remove it entirely rather than just stilling it */
-  .petals {
-    display: none;
-  }
-
-  .floral-breathe {
-    animation: none;
-    transform: none;
   }
 }
