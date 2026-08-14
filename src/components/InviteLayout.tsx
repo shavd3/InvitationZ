@@ -32,8 +32,12 @@ export function ScriptureVerse() {
 
 function ParentLine({ name }: { name: string }) {
   const lateMatch = name.match(/^(.+?)\s*\(Late\)$/i);
+  /* One line regardless of phone width: the longest host line ("Eshan & Shyanika
+     Fernando (Late)") measures ~303px at 14px, so the size tracks the viewport —
+     14px × (100vw − 93px card chrome) / 303px, with ~2% safety — and caps at
+     today's sizes from ~404px up. Both lines share it so they stay matched. */
   const lineClass =
-    'uppercase tracking-[0.15em] text-sm sm:text-[0.95rem] text-warm-gray font-semibold';
+    'uppercase tracking-[0.15em] whitespace-nowrap text-[clamp(0.65rem,calc(4.5vw_-_4.2px),0.875rem)] sm:text-[0.95rem] text-warm-gray font-semibold';
 
   if (lateMatch) {
     return (
