@@ -15,6 +15,10 @@ export const WEDDING = {
   refreshmentsNote: 'Refreshments to follow at church premises',
   brideParents: 'Heshan & Sharmila Perera',
   groomParents: 'Eshan & Shyanika Fernando (Late)',
+  verse: {
+    text: "I hold you in my heart, for we have shared together God's blessings.",
+    reference: 'Philippians 1 : 7',
+  },
   contacts: [
     { label: 'Shavin', phone: '+94 77 359 2037', tel: 'tel:+94773592037' },
     { label: 'Amaya', phone: '+94 72 230 7420', tel: 'tel:+94722307420' },

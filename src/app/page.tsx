@@ -1,9 +1,16 @@
 import { InvitationFrame } from '@/components/Floral';
-import { CoupleNames, ParentsBlessing, EventDetails } from '@/components/InviteLayout';
+import {
+  CoupleNames,
+  ParentsBlessing,
+  EventDetails,
+  ScriptureVerse,
+} from '@/components/InviteLayout';
 
 export default function HomePage() {
   return (
     <InvitationFrame>
+      <ScriptureVerse />
+
       <ParentsBlessing />
 
       <CoupleNames />

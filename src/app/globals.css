@@ -201,7 +201,8 @@ h1, h2, h3, h4 {
    Plays once the reveal doors part. Each block presses into the paper like type;
    the date hairlines draw themselves; the names are written on left to right.
    Blocks sit on a 0.2s ladder; the names and hairline rules hardcode their slots
-   (children 2 and 3 on both pages) — if the page order changes, retime those.
+   (children 3 and 4 on both pages — the verse epigraph is child 1) — if the page
+   order changes, retime those.
 
    Scoped to .invite-entering, which InviteExperience REMOVES ~3.4s after the
    doors part. It must be transient: .invite-content-visible persists, and any
@@ -237,37 +238,37 @@ h1, h2, h3, h4 {
   }
 }
 
-/* The names don't press in — they are written. Wipe delay matches the child-2
-   ladder slot; the catch follows once the ink is down, and the living passes take
-   over from there. Generous negative insets keep the script's swashes outside the
-   clip. Placed after the ladder so this rule's animation-delay wins the
-   equal-specificity tie with nth-child(2). */
+/* The names don't press in — they are written. Wipe delay matches the child-3
+   ladder slot (the verse epigraph is child 1, hosts child 2); the catch follows
+   once the ink is down, and the living passes take over from there. Generous
+   negative insets keep the script's swashes outside the clip. Placed after the
+   ladder so this rule's animation-delay wins the equal-specificity tie. */
 .invite-content-visible .stagger-in > .couple-names {
   opacity: 1;
   transform: none;
   filter: none;
   clip-path: inset(-40% 102% -45% -2%);
   animation:
-    write 1.5s cubic-bezier(0.5, 0, 0.3, 1) 0.45s both,
-    catch-a 1.1s ease-in-out 2.15s,
-    pass-a 11s ease-in-out 4.5s infinite,
-    pass-b 17s ease-in-out 4.5s infinite;
+    write 1.5s cubic-bezier(0.5, 0, 0.3, 1) 0.65s both,
+    catch-a 1.1s ease-in-out 2.35s,
+    pass-a 11s ease-in-out 4.7s infinite,
+    pass-b 17s ease-in-out 4.7s infinite;
 }
 
 @keyframes write {
   to { clip-path: inset(-40% -4% -45% -2%); }
 }
 
-/* Date hairlines (inside child 3, whose slot is 0.65s) draw from their centres
+/* Date hairlines (inside child 4, whose slot is 0.85s) draw from their centres
    while their block is still settling in */
 .invite-entering .date-rule-h {
   transform: scaleX(0);
-  animation: rule-draw-h 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
+  animation: rule-draw-h 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.05s both;
 }
 
 .invite-entering .date-rule-v {
   transform: scaleY(0);
-  animation: rule-draw-v 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
+  animation: rule-draw-v 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.05s both;
 }
 
 @keyframes rule-draw-h { to { transform: scaleX(1); } }

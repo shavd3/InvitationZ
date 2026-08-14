@@ -8,6 +8,28 @@ import { WEDDING } from '@/lib/constants';
    - The couple's names are the only script on the card, and gold appears just where
      an engraver would spend it: names, "together with", the addressee, the day. */
 
+/* The epigraph — scripture speaks first, above the hosts. Whispered italic with
+   the reference in letterspaced gold caps; no quotation marks (stationery
+   convention for epigraphs). */
+export function ScriptureVerse() {
+  return (
+    <div className="text-center">
+      <p
+        className="italic text-[0.95rem] sm:text-base text-warm-gray-light leading-[1.65]"
+        style={{ fontFamily: 'var(--font-display)' }}
+      >
+        {WEDDING.verse.text}
+      </p>
+      <p
+        className="uppercase tracking-[0.28em] text-[0.58rem] text-[color:var(--color-gold)] font-medium mt-2.5"
+        style={{ fontFamily: 'var(--font-sans)' }}
+      >
+        {WEDDING.verse.reference}
+      </p>
+    </div>
+  );
+}
+
 function ParentLine({ name }: { name: string }) {
   const lateMatch = name.match(/^(.+?)\s*\(Late\)$/i);
   const lineClass =

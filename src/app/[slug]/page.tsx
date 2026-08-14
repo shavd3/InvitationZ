@@ -12,6 +12,7 @@ import {
   EventDetails,
   ContactDetails,
   RefreshmentsNote,
+  ScriptureVerse,
 } from '@/components/InviteLayout';
 import { WEDDING, googleCalendarUrl } from '@/lib/constants';
 import { seatsAllowed, type GuestPublic } from '@/lib/guest';
@@ -125,6 +126,8 @@ export default function RsvpPage() {
   return (
     <InviteExperience contentReady={!loading}>
       <InvitationFrame>
+        <ScriptureVerse />
+
         <ParentsBlessing inviteeName={guest.displayName} />
 
         <CoupleNames />
