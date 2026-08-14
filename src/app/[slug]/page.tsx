@@ -91,7 +91,7 @@ export default function RsvpPage() {
 
   if (loading) {
     return (
-      <InviteExperience>
+      <InviteExperience contentReady={!loading}>
         <InvitationFrame>
           <p className="text-center text-warm-gray-muted text-sm tracking-widest uppercase">
             Loading your invitation...
@@ -103,7 +103,7 @@ export default function RsvpPage() {
 
   if (error && !guest) {
     return (
-      <InviteExperience>
+      <InviteExperience contentReady={!loading}>
         <InvitationFrame>
           <div className="text-center">
             <p className="text-base text-warm-gray mb-4">{error}</p>
@@ -123,7 +123,7 @@ export default function RsvpPage() {
   const maxSeats = seatsAllowed(guest.invitedCount);
 
   return (
-    <InviteExperience>
+    <InviteExperience contentReady={!loading}>
       <InvitationFrame>
         <ParentsBlessing inviteeName={guest.displayName} />
 

@@ -1,34 +1,53 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { InvitationCard, INVITE_THEME } from '@/components/Floral';
 import { CoupleNames } from '@/components/InviteLayout';
 
-const HOLD_MS = 3200;
+/* The overlay doubles as the loading screen: it holds past HOLD_MS until the
+   page says its content is ready (canClose), so the doors never open onto a
+   "Loading..." flash. WAIT_CAP_MS is the failsafe — a dead network must not
+   hold the doors shut forever. */
+const HOLD_MS = 4000;
 const FADE_MS = 1200;
 const PANEL_OPEN_DELAY_MS = 400;
+const WAIT_CAP_MS = 12000;
 
 type RevealOverlayProps = {
   onComplete: () => void;
+  canClose?: boolean;
 };
 
-export function RevealOverlay({ onComplete }: RevealOverlayProps) {
+export function RevealOverlay({ onComplete, canClose = true }: RevealOverlayProps) {
   const [panelsOpen, setPanelsOpen] = useState(false);
   const [contentVisible, setContentVisible] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [holdDone, setHoldDone] = useState(false);
+  const [waitCapped, setWaitCapped] = useState(false);
+  const closeStarted = useRef(false);
 
   useEffect(() => {
     const panelTimer = window.setTimeout(() => setPanelsOpen(true), PANEL_OPEN_DELAY_MS);
     const contentTimer = window.setTimeout(() => setContentVisible(true), PANEL_OPEN_DELAY_MS + 600);
-    const closeTimer = window.setTimeout(() => setClosing(true), HOLD_MS);
-    const doneTimer = window.setTimeout(onComplete, HOLD_MS + FADE_MS);
+    const holdTimer = window.setTimeout(() => setHoldDone(true), HOLD_MS);
+    const capTimer = window.setTimeout(() => setWaitCapped(true), WAIT_CAP_MS);
     return () => {
       window.clearTimeout(panelTimer);
       window.clearTimeout(contentTimer);
-      window.clearTimeout(closeTimer);
-      window.clearTimeout(doneTimer);
+      window.clearTimeout(holdTimer);
+      window.clearTimeout(capTimer);
     };
-  }, [onComplete]);
+  }, []);
+
+  const shouldClose = holdDone && (canClose || waitCapped);
+
+  useEffect(() => {
+    if (!shouldClose || closeStarted.current) return;
+    closeStarted.current = true;
+    setClosing(true);
+    const doneTimer = window.setTimeout(onComplete, FADE_MS);
+    return () => window.clearTimeout(doneTimer);
+  }, [shouldClose, onComplete]);
 
   return (
     <div

@@ -198,30 +198,36 @@ h1, h2, h3, h4 {
 }
 
 /* ── The entrance — the card engraves itself ─────────────────────────────────
-   Plays once the reveal doors part (.invite-content-visible). Each block presses
-   into the paper like type; the date hairlines draw themselves; the names are
-   written on left to right, then the foil catches the light once. Blocks sit on
-   a 0.2s ladder; the names and hairline rules hardcode their slots (children 2
-   and 3 on both pages) — if the page order changes, retime those two below. */
-.invite-content-visible .stagger-in > :not(.petal-burst-layer) {
+   Plays once the reveal doors part. Each block presses into the paper like type;
+   the date hairlines draw themselves; the names are written on left to right.
+   Blocks sit on a 0.2s ladder; the names and hairline rules hardcode their slots
+   (children 2 and 3 on both pages) — if the page order changes, retime those.
+
+   Scoped to .invite-entering, which InviteExperience REMOVES ~3.4s after the
+   doors part. It must be transient: .invite-content-visible persists, and any
+   panel mounted later (Amend Response, the thank-you card, contacts) would
+   otherwise replay the press-in — sitting invisible through its ladder delay.
+   The names' own animation stays on the persistent class below, because that
+   element never remounts and its passes must keep running forever. */
+.invite-entering .stagger-in > :not(.petal-burst-layer) {
   opacity: 0;
   transform: translateY(10px);
   filter: blur(4px);
   animation: press-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.invite-content-visible .stagger-in > *:nth-child(1) { animation-delay: 0.25s; }
-.invite-content-visible .stagger-in > *:nth-child(2) { animation-delay: 0.45s; }
-.invite-content-visible .stagger-in > *:nth-child(3) { animation-delay: 0.65s; }
-.invite-content-visible .stagger-in > *:nth-child(4) { animation-delay: 0.85s; }
-.invite-content-visible .stagger-in > *:nth-child(5) { animation-delay: 1.05s; }
-.invite-content-visible .stagger-in > *:nth-child(6) { animation-delay: 1.25s; }
-.invite-content-visible .stagger-in > *:nth-child(7) { animation-delay: 1.45s; }
-.invite-content-visible .stagger-in > *:nth-child(8) { animation-delay: 1.65s; }
-.invite-content-visible .stagger-in > *:nth-child(9) { animation-delay: 1.85s; }
-.invite-content-visible .stagger-in > *:nth-child(10) { animation-delay: 2.05s; }
-.invite-content-visible .stagger-in > *:nth-child(11) { animation-delay: 2.25s; }
-.invite-content-visible .stagger-in > *:nth-child(12) { animation-delay: 2.45s; }
+.invite-entering .stagger-in > *:nth-child(1) { animation-delay: 0.25s; }
+.invite-entering .stagger-in > *:nth-child(2) { animation-delay: 0.45s; }
+.invite-entering .stagger-in > *:nth-child(3) { animation-delay: 0.65s; }
+.invite-entering .stagger-in > *:nth-child(4) { animation-delay: 0.85s; }
+.invite-entering .stagger-in > *:nth-child(5) { animation-delay: 1.05s; }
+.invite-entering .stagger-in > *:nth-child(6) { animation-delay: 1.25s; }
+.invite-entering .stagger-in > *:nth-child(7) { animation-delay: 1.45s; }
+.invite-entering .stagger-in > *:nth-child(8) { animation-delay: 1.65s; }
+.invite-entering .stagger-in > *:nth-child(9) { animation-delay: 1.85s; }
+.invite-entering .stagger-in > *:nth-child(10) { animation-delay: 2.05s; }
+.invite-entering .stagger-in > *:nth-child(11) { animation-delay: 2.25s; }
+.invite-entering .stagger-in > *:nth-child(12) { animation-delay: 2.45s; }
 
 @keyframes press-in {
   to {
@@ -254,12 +260,12 @@ h1, h2, h3, h4 {
 
 /* Date hairlines (inside child 3, whose slot is 0.65s) draw from their centres
    while their block is still settling in */
-.invite-content-visible .date-rule-h {
+.invite-entering .date-rule-h {
   transform: scaleX(0);
   animation: rule-draw-h 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
 }
 
-.invite-content-visible .date-rule-v {
+.invite-entering .date-rule-v {
   transform: scaleY(0);
   animation: rule-draw-v 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.85s both;
 }
@@ -733,9 +739,10 @@ input:focus {
     transition: none;
   }
 
-  /* Reduced-motion users get .invite-content-visible immediately (no reveal), so
-     every entrance rule must be neutralised here, at matching specificity. */
-  .invite-content-visible .stagger-in > :not(.petal-burst-layer),
+  /* Reduced-motion users get .invite-content-visible immediately (no reveal, so
+     .invite-entering never appears — covered anyway as belt and braces). Every
+     entrance rule must be neutralised here, at matching specificity. */
+  .invite-entering .stagger-in > :not(.petal-burst-layer),
   .invite-content-visible .stagger-in > .couple-names {
     animation: none;
     opacity: 1;
@@ -748,8 +755,8 @@ input:focus {
     animation: none;
   }
 
-  .invite-content-visible .date-rule-h,
-  .invite-content-visible .date-rule-v {
+  .invite-entering .date-rule-h,
+  .invite-entering .date-rule-v {
     animation: none;
     transform: none;
   }
