@@ -25,6 +25,21 @@ export const WEDDING = {
   ],
 } as const;
 
+/** WhatsApp-ready invite text copied from the admin "Copy invite" action. */
+export function buildInviteShareMessage(guestName: string, inviteUrl: string): string {
+  return [
+    'On behalf of our parents,',
+    `Dear ${guestName}`,
+    '',
+    "Our journey together wouldn't be complete without the people we treasure most. We would be deeply honored by your presence on our wedding day💍",
+    '',
+    'Please click on the link to view the invitation and submit your response.',
+    inviteUrl,
+    '',
+    'Kindly favour us with your response by the 20th of September✨',
+  ].join('\n');
+}
+
 export function googleCalendarUrl(): string {
   const start = '20261010T094500Z'; // 3:15 PM +05:30 = 09:45 UTC
   const end = '20261010T120000Z'; // 5:30 PM +05:30

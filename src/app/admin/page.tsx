@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Copy, Check, LogOut, RefreshCw, RotateCcw } from 'lucide-react';
+import { buildInviteShareMessage } from '@/lib/constants';
 import type { GuestAdmin } from '@/lib/guest';
 
 type AdminGuest = GuestAdmin & { inviteUrl: string };
@@ -61,8 +62,9 @@ export default function AdminPage() {
     setGuests([]);
   }
 
-  async function copyLink(slug: string, url: string) {
-    await navigator.clipboard.writeText(url);
+  async function copyInvite(slug: string, displayName: string, url: string) {
+    const message = buildInviteShareMessage(displayName, url);
+    await navigator.clipboard.writeText(message);
     setCopiedSlug(slug);
     setTimeout(() => setCopiedSlug(''), 2000);
   }
@@ -220,7 +222,7 @@ export default function AdminPage() {
                     <div className="flex flex-col sm:flex-row items-end sm:justify-end gap-2">
                       <button
                         type="button"
-                        onClick={() => copyLink(g.slug, g.inviteUrl)}
+                        onClick={() => copyInvite(g.slug, g.displayName, g.inviteUrl)}
                         className="btn-secondary inline-flex items-center gap-1.5 text-xs py-1.5 px-3"
                       >
                         {copiedSlug === g.slug ? (
@@ -229,7 +231,7 @@ export default function AdminPage() {
                           </>
                         ) : (
                           <>
-                            <Copy size={14} /> Copy link
+                            <Copy size={14} /> Copy invite
                           </>
                         )}
                       </button>
