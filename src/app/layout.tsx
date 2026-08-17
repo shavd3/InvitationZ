@@ -3,9 +3,35 @@ import { INVITE_THEME } from '@/components/Floral';
 import './globals.css';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://amayaandshavin.com'
+  ),
   title: 'Amaya & Shavin | Wedding Invitation',
   description: 'You are cordially invited to the wedding of Amaya & Shavin — 10th October 2026',
-  icons: { icon: '/logo.png' },
+  icons: {
+    icon: [{ url: '/logo.png', type: 'image/png', sizes: '1024x1024' }],
+    apple: [{ url: '/logo.png', type: 'image/png', sizes: '1024x1024' }],
+  },
+  openGraph: {
+    title: 'Amaya & Shavin | Wedding Invitation',
+    description: 'You are cordially invited to the wedding of Amaya & Shavin — 10th October 2026',
+    siteName: 'Amaya & Shavin',
+    type: 'website',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'Amaya & Shavin — Forever & Always',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Amaya & Shavin | Wedding Invitation',
+    description: 'You are cordially invited to the wedding of Amaya & Shavin — 10th October 2026',
+    images: ['/logo.png'],
+  },
 };
 
 export default function RootLayout({
