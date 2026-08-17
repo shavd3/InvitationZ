@@ -29,7 +29,7 @@ export const WEDDING = {
 export function buildInviteShareMessage(guestName: string, inviteUrl: string): string {
   return [
     'On behalf of our parents,',
-    `Dear ${guestName}`,
+    `Dear ${guestName} ❤️`,
     '',
     "Our journey together wouldn't be complete without the people we treasure most. We would be deeply honored by your presence on our wedding day💍",
     '',
