@@ -12,7 +12,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('guest_items')
     .select(
-      'id, first_name, last_name, side, category, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at'
+      'id, first_name, last_name, side, category, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at, rsvp_deadline'
     )
     .order('first_name');
 

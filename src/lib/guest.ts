@@ -1,3 +1,18 @@
+/** Stamped onto invite links created from now on. Null on a row keeps 20 September. */
+export const NEW_LINK_RSVP_DEADLINE = '2026-10-01';
+
+/**
+ * Card line and WhatsApp phrase for a stored `rsvp_deadline`.
+ * Anything other than the new-link date — including null — stays on the original 20 September,
+ * so invitations already sent do not change.
+ */
+export function rsvpDeadlineCopy(stored: string | null | undefined): { card: string; share: string } {
+  if (stored?.slice(0, 10) === NEW_LINK_RSVP_DEADLINE) {
+    return { card: '1st October 2026', share: '1st of October' };
+  }
+  return { card: '20th September 2026', share: '20th of September' };
+}
+
 export type GuestPublic = {
   displayName: string;
   slug: string;
@@ -5,6 +20,8 @@ export type GuestPublic = {
   rsvpStatus: 'pending' | 'confirmed' | 'declined';
   confirmedCount: number | null;
   respondedAt: string | null;
+  /** ISO date (`YYYY-MM-DD`) when this link uses the later deadline; null keeps 20 September. */
+  rsvpDeadline: string | null;
 };
 
 export type GuestAdmin = GuestPublic & {
@@ -26,6 +43,7 @@ type GuestRow = {
   rsvp_status: 'pending' | 'confirmed' | 'declined';
   confirmed_count: number | null;
   rsvp_responded_at: string | null;
+  rsvp_deadline: string | null;
 };
 
 type GuestRowPublic = Pick<
@@ -37,6 +55,7 @@ type GuestRowPublic = Pick<
   | 'rsvp_status'
   | 'confirmed_count'
   | 'rsvp_responded_at'
+  | 'rsvp_deadline'
 >;
 
 export function displayName(firstName: string, lastName: string): string {
@@ -91,6 +110,8 @@ export function toPublicGuest(row: GuestRowPublic): GuestPublic {
     rsvpStatus: row.rsvp_status,
     confirmedCount: row.confirmed_count,
     respondedAt: row.rsvp_responded_at,
+    rsvpDeadline:
+      row.rsvp_deadline?.slice(0, 10) === NEW_LINK_RSVP_DEADLINE ? NEW_LINK_RSVP_DEADLINE : null,
   };
 }
 

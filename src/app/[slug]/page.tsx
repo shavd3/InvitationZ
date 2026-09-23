@@ -15,7 +15,7 @@ import {
   ScriptureVerse,
 } from '@/components/InviteLayout';
 import { WEDDING, googleCalendarUrl } from '@/lib/constants';
-import { seatsAllowed, type GuestPublic } from '@/lib/guest';
+import { rsvpDeadlineCopy, seatsAllowed, type GuestPublic } from '@/lib/guest';
 
 type Step = 'view' | 'accept-count';
 
@@ -143,7 +143,7 @@ export default function RsvpPage() {
           >
             Kindly respond by{' '}
             <span className="text-[color:var(--color-gold-dark)] font-semibold">
-              {WEDDING.rsvpDeadline}
+              {rsvpDeadlineCopy(guest.rsvpDeadline).card}
             </span>
           </p>
         )}

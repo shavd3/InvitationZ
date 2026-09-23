@@ -2,6 +2,8 @@ import {
   buildSlug,
   displayName,
   extractTokenFromSlug,
+  NEW_LINK_RSVP_DEADLINE,
+  rsvpDeadlineCopy,
   seatsAllowed,
   slugifyName,
   toPublicGuest,
@@ -33,10 +35,31 @@ const guest = toPublicGuest({
   rsvp_status: 'pending',
   confirmed_count: null,
   rsvp_responded_at: null,
+  rsvp_deadline: null,
 });
 
 assert(guest.slug === 'nithila-mendis-4f2k', 'public slug');
 assert(guest.invitedCount === 2, 'invited count');
+assert(guest.rsvpDeadline === null, 'existing link keeps a null deadline');
+assert(rsvpDeadlineCopy(guest.rsvpDeadline).card === '20th September 2026', 'existing card date');
+assert(rsvpDeadlineCopy(null).share === '20th of September', 'existing share phrase');
+assert(
+  rsvpDeadlineCopy(NEW_LINK_RSVP_DEADLINE).card === '1st October 2026',
+  'new link card date',
+);
+assert(rsvpDeadlineCopy(NEW_LINK_RSVP_DEADLINE).share === '1st of October', 'new link share phrase');
+
+const laterGuest = toPublicGuest({
+  first_name: 'New',
+  last_name: 'Guest',
+  count: 1,
+  invite_token: 'abc123',
+  rsvp_status: 'pending',
+  confirmed_count: null,
+  rsvp_responded_at: null,
+  rsvp_deadline: NEW_LINK_RSVP_DEADLINE,
+});
+assert(laterGuest.rsvpDeadline === NEW_LINK_RSVP_DEADLINE, 'new link stores 1 October');
 
 // A count-0 row must still admit its holder for one seat, not dead-end them.
 assert(seatsAllowed(0) === 1, 'seatsAllowed floors at 1');

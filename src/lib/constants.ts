@@ -1,3 +1,5 @@
+import { rsvpDeadlineCopy } from './guest';
+
 export const WEDDING = {
   dateIso: '2026-10-10T15:15:00+05:30',
   dateDisplay: 'Saturday, 10th October 2026',
@@ -26,7 +28,11 @@ export const WEDDING = {
 } as const;
 
 /** WhatsApp-ready invite text copied from the admin "Copy invite" action. */
-export function buildInviteShareMessage(guestName: string, inviteUrl: string): string {
+export function buildInviteShareMessage(
+  guestName: string,
+  inviteUrl: string,
+  rsvpDeadline?: string | null,
+): string {
   return [
     'On behalf of our parents,',
     `Dear ${guestName} ❤️`,
@@ -36,7 +42,7 @@ export function buildInviteShareMessage(guestName: string, inviteUrl: string): s
     'Please click on the link to view the invitation and submit your response.',
     inviteUrl,
     '',
-    'Kindly favour us with your response by the 20th of September✨',
+    `Kindly favour us with your response by the ${rsvpDeadlineCopy(rsvpDeadline).share}✨`,
   ].join('\n');
 }
 

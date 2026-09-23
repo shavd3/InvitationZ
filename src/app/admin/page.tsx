@@ -62,8 +62,8 @@ export default function AdminPage() {
     setGuests([]);
   }
 
-  async function copyInvite(slug: string, displayName: string, url: string) {
-    const message = buildInviteShareMessage(displayName, url);
+  async function copyInvite(slug: string, displayName: string, url: string, rsvpDeadline: string | null) {
+    const message = buildInviteShareMessage(displayName, url, rsvpDeadline);
     await navigator.clipboard.writeText(message);
     setCopiedSlug(slug);
     setTimeout(() => setCopiedSlug(''), 2000);
@@ -222,7 +222,7 @@ export default function AdminPage() {
                     <div className="flex flex-col sm:flex-row items-end sm:justify-end gap-2">
                       <button
                         type="button"
-                        onClick={() => copyInvite(g.slug, g.displayName, g.inviteUrl)}
+                        onClick={() => copyInvite(g.slug, g.displayName, g.inviteUrl, g.rsvpDeadline)}
                         className="btn-secondary inline-flex items-center gap-1.5 text-xs py-1.5 px-3"
                       >
                         {copiedSlug === g.slug ? (

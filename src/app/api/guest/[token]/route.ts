@@ -12,7 +12,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   const { data, error } = await supabase
     .from('guest_items')
     .select(
-      'first_name, last_name, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at'
+      'first_name, last_name, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at, rsvp_deadline'
     )
     .eq('invite_token', token)
     .maybeSingle();

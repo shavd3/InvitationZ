@@ -23,7 +23,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   const supabase = createServerSupabase();
   const { data: existing, error: fetchError } = await supabase
     .from('guest_items')
-    .select('count, invite_token, first_name, last_name, rsvp_status, confirmed_count, rsvp_responded_at')
+    .select('count, invite_token, first_name, last_name, rsvp_status, confirmed_count, rsvp_responded_at, rsvp_deadline')
     .eq('invite_token', token)
     .maybeSingle();
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     })
     .eq('invite_token', token)
     .select(
-      'first_name, last_name, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at'
+      'first_name, last_name, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at, rsvp_deadline'
     )
     .single();
 

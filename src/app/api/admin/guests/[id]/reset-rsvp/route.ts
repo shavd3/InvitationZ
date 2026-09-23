@@ -22,7 +22,7 @@ export async function POST(_request: NextRequest, { params }: RouteParams) {
     })
     .eq('id', id)
     .select(
-      'id, first_name, last_name, side, category, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at'
+      'id, first_name, last_name, side, category, count, invite_token, rsvp_status, confirmed_count, rsvp_responded_at, rsvp_deadline'
     )
     .maybeSingle();
 
